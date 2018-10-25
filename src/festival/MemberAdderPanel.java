@@ -5,6 +5,7 @@ import java.awt.Dimension;
 import java.awt.Font;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.util.ArrayList;
 
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
@@ -33,7 +34,6 @@ public class MemberAdderPanel extends JPanel implements ActionListener, Document
 	private boolean correctName = false;
 	private boolean correctOrgin = false;
 	private final JComboBox<String> instrumentBox = new JComboBox<String>();
-	
 	
 	public MemberAdderPanel(BandAdderPanel panel) {
 		bandAdder = panel;
@@ -147,6 +147,7 @@ public class MemberAdderPanel extends JPanel implements ActionListener, Document
 		if(e.getSource()==btnAddMember) {
 			String instrument = (String)instrumentBox.getSelectedItem();
 			bandAdder.updateMemberList(tfName.getText(), instrument);
+			bandAdder.addMemberToList(new BandMember(tfName.getText(), tfOrgin.getText(), instrument, tfXtra.getText()));
 			tfName.setText("");
 			tfOrgin.setText("");
 			btnDone.setEnabled(true);
@@ -154,6 +155,7 @@ public class MemberAdderPanel extends JPanel implements ActionListener, Document
 		
 		if(e.getSource()==btnDone) {
 			bandAdder.checkSubmit();
+			bandAdder.checkMemberSize();
 			frame.dispose();
 		}
 	}
