@@ -6,6 +6,7 @@ import java.awt.Font;
 import java.awt.Image;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.util.ArrayList;
 
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
@@ -37,6 +38,7 @@ public class BandAdderPanel extends JPanel implements ActionListener, DocumentLi
 	private boolean correctName = false;
 	private boolean correctOrgin = false;
 	private int memberCounter = 0;
+	private ArrayList<BandMember> memberList = new ArrayList<BandMember>();
 	
 	public BandAdderPanel(WorkerScreen wScreen) {
 		this.wScreen = wScreen;
@@ -174,6 +176,11 @@ public class BandAdderPanel extends JPanel implements ActionListener, DocumentLi
 		if(memberCounter >= 5) {
 			btnAdd.setEnabled(false);
 		}
+	}
+	
+	public void addMemberToList(BandMember member) {
+		memberList.add(member);
+		
 	}
 	
 	public void insertUpdate(DocumentEvent e) {
