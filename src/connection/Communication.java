@@ -13,6 +13,7 @@ public class Communication {
 	private final String password = "2o0hd5wd";
 	
 	public Connection connect() {
+		//testttt
 		Connection conn = null;
 		try {
 			conn = DriverManager.getConnection(url,userID,password);
