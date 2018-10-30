@@ -79,4 +79,9 @@ public class CardController extends JFrame implements CardSwitcher {
 	public void addBand(String bandname, String orgin, ArrayList<BandMember> list) {
 		
 	}
+	
+	public void updateLabels(String band, String worker) {
+		concertCard.setBandLabel(band);
+		concertCard.setContactLabel(worker);
+	}
 }
