@@ -25,8 +25,8 @@ public class WorkerScreen extends JPanel implements ActionListener {
 	private JButton btnAddBand = new JButton("Add Band");
 	private JButton btnSpecify = new JButton("Specify Concert");
 	
-	private int bandAmount = 50;
-	private int workerAmount = 50;
+	private int bandAmount = 0;
+	private int workerAmount = 0;
 	private ButtonGroup workerbg = new ButtonGroup();
 	private ButtonGroup bandbg = new ButtonGroup();
 	private WorkerRBListener rbWorker = new WorkerRBListener();
@@ -40,7 +40,7 @@ public class WorkerScreen extends JPanel implements ActionListener {
 	public WorkerScreen(CardController controller) {
 		setPreferredSize(new Dimension(1000, 700));
 		setLayout(null);
-		controller = controller;
+		this.controller = controller;
 		setBackground(Color.PINK);
 		add(bandPanel());
 	}
@@ -53,7 +53,7 @@ public class WorkerScreen extends JPanel implements ActionListener {
 		Font lblFont = new Font("SansSerif", Font.BOLD, 25);
 		
 		bandListPanel = new JPanel();
-		//bandListPanel.setLayout(new GridLayout(getBandListCount(), 1)); //Hämta antalet band från DB
+		//bandListPanel.setLayout(new GridLayout(getBandListCount(), 1)); 
 		JScrollPane bandScroll = new JScrollPane(bandListPanel);
 		bandScroll.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_ALWAYS);
 		bandScroll.setBounds(50, 75, 300, 500);
@@ -62,7 +62,7 @@ public class WorkerScreen extends JPanel implements ActionListener {
 		lblBand.setHorizontalAlignment(JLabel.CENTER);
 		
 		workerListPanel = new JPanel();
-		workerListPanel.setLayout(new GridLayout(getWorkerListCount(), 1)); //Hämta antalet workers från DB
+		workerListPanel.setLayout(new GridLayout(getWorkerListCount(), 1)); 
 		JScrollPane workerScroll = new JScrollPane(workerListPanel);
 		workerScroll.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_ALWAYS);
 		workerScroll.setBounds(450, 75, 300, 500);
@@ -76,8 +76,8 @@ public class WorkerScreen extends JPanel implements ActionListener {
 		//btnSpecify.setEnabled(false);
 		btnSpecify.addActionListener(this);
 		
-		//setUpWorkerList(conn.getWorkers); | hämta namnen på arbetarna i DB
-		//setUpBandList(conn.getBands()); | hämta namnen på banden i DB
+		setUpWorkerList(controller.getWorkerList());
+		//setUpBandList(controller.getBandList()); 
 		
 		bandPanel.add(btnSpecify);
 		bandPanel.add(btnAddBand);
@@ -95,8 +95,8 @@ public class WorkerScreen extends JPanel implements ActionListener {
 	}
 	
 	public void setUpBandList(ArrayList<String> bandList) {
-		bandListPanel.setLayout(new GridLayout(getBandListCount(), 1));
 		bandListPanel.removeAll();
+		bandListPanel.setLayout(new GridLayout(getBandListCount(), 1));
 		bandListPanel.repaint();
 		
 		for (int i = 0; i < bandList.size(); i++) {
@@ -111,7 +111,7 @@ public class WorkerScreen extends JPanel implements ActionListener {
 	public void setUpWorkerList(ArrayList<String> workerList) {
 		for (int i = 0; i < workerList.size(); i++) {
 			JRadioButton btn = new JRadioButton(workerList.get(i));
-			btn.setSize(new Dimension(300, 60));
+			btn.setSize(new Dimension(300, 80));
 			workerbg.add(btn);
 			btn.addActionListener(rbWorker);
 			workerListPanel.add(btn);
@@ -119,12 +119,12 @@ public class WorkerScreen extends JPanel implements ActionListener {
 	}
 	
 	public int getBandListCount() {
-		//bandAmount = conn.amountOfBands | hämta antalet band i DB
+		bandAmount = controller.getGridSize("Band");
 		return bandAmount;
 	}
 	
 	public int getWorkerListCount() {
-		//workerAmount = conn.amountOfWorkers | hämta antalet arbetare i DB
+		workerAmount = controller.getGridSize("Worker");
 		return workerAmount;
 	}
 	

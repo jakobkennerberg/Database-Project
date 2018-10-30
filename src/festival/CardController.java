@@ -2,6 +2,7 @@ package festival;
 
 import java.awt.CardLayout;
 import java.awt.Color;
+import java.util.ArrayList;
 
 import javax.swing.JFrame;
 import javax.swing.JPanel;
@@ -12,8 +13,8 @@ public class CardController extends JFrame implements CardSwitcher {
 	CardLayout cardLayout = new CardLayout();
 	private JPanel cards = new JPanel(cardLayout);
 	private String currentCard;
-	private ConcertPanel concertCard; // = new ConcertPanel();
-	private WorkerScreen workerCard; //= new WorkerScreen();
+	private ConcertPanel concertCard; // = new ConcertPanel(this);
+	private WorkerScreen workerCard; // = new WorkerScreen(this);
 	private Communication dbManager;
 	
 	public CardController(Communication comm) {
@@ -58,5 +59,20 @@ public class CardController extends JFrame implements CardSwitcher {
 			currentCard = "workerScreen";
 		}
 		cardLayout.show(cards, currentCard);
+	}
+	
+	public int getGridSize(String str) {
+		int gridSize = dbManager.getCount(str);
+		return gridSize;
+	}
+	
+	public ArrayList<String> getBandList() {
+		ArrayList<String> list = dbManager.getBandNameList();
+		return list;
+	}
+	
+	public ArrayList<String> getWorkerList() {
+		ArrayList<String> list = dbManager.getWorkerNameList();
+		return list;
 	}
 }

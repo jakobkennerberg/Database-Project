@@ -60,8 +60,8 @@ public class Communication {
 	 * All the names of the workers
 	 * @return
 	 */
-	public ArrayList<String> getWorkerName() {
-		String query = "Select * From Worker";
+	public ArrayList<String> getWorkerNameList() {
+		String query = "Select * From Worker"; //elr name
 		ArrayList<String> workerName = new ArrayList<String>();
 		
 		try(Connection conn = connect()) {
@@ -72,42 +72,69 @@ public class Communication {
 				workerName.add(rs.getString("name"));
 			}
 			
-		} catch (SQLException e) {
-
-		}
+		} catch (SQLException e) {}
 		return workerName;
 	}
 	
+	public ArrayList<String> getBandNameList() {
+		String query = "Select * From Band"; //elr name
+		ArrayList<String> bandNames = new ArrayList<String>();
+		
+		try(Connection conn = connect()) {
+			Statement st = conn.createStatement();
+			ResultSet rs = st.executeQuery(query);
+			
+			while (rs.next()) {
+				bandNames.add(rs.getString("name"));
+			}
+			
+		} catch (SQLException e) {}
+		return bandNames;
+	}
+	
 	/**
-	 * The numbers of Workers
+	 * The numbers of either workers or bands, depending on the parameters
 	 * @return integer with Workers
 	 */
 	
-	public int getWorkerNumbers() {
+	public int getCount(String type) {
 		int count = 0;
-		String quary = "Select Count(*) From Worker";
+		String query = "";
+		String queryWorker = "Select Count(*) From Worker";
+		String queryBand = "Select Count(*) from Band";
+		if(type == "Band") {
+			query = queryBand;
+		} else if (type == "Worker") {
+			query = queryWorker;
+		}
+		
 		try (Connection conn = connect()) {
 			Statement st = conn.createStatement();
-			ResultSet rs = st.executeQuery(quary);
+			ResultSet rs = st.executeQuery(query);
 			
 			while(rs.next()) {
 				count=rs.getInt(1);
 			}
-		} catch (SQLException e) {
-			
-		}
+		} catch (SQLException e) {}
+		
 		return count;
 	}
 	
 	
 	public static void main (String[] args) {
 		Communication comm = new Communication();
+		ArrayList<String> list = comm.getWorkerNameList();
+		
+		for(String str : list) {
+			System.out.println(str);
+		}
 		
 //		ArrayList<String> getWorkerName = comm.getWorkerName();
 //		for (String workerName : getWorkerName) {
 //			System.out.println(workerName);
 //		}
-		System.out.println(comm.getWorkerNumbers());
+		
+		//System.out.println(comm.getCount("Band"));
 		
 	}
 
