@@ -75,4 +75,8 @@ public class CardController extends JFrame implements CardSwitcher {
 		ArrayList<String> list = dbManager.getWorkerNameList();
 		return list;
 	}
+	
+	public void addBand(String bandname, String orgin, ArrayList<BandMember> list) {
+		
+	}
 }

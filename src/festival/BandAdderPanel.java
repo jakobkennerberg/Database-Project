@@ -179,8 +179,7 @@ public class BandAdderPanel extends JPanel implements ActionListener, DocumentLi
 	}
 	
 	public void addMemberToList(BandMember member) {
-		memberList.add(member);
-		
+		memberList.add(member);	
 	}
 	
 	public void insertUpdate(DocumentEvent e) {
@@ -198,6 +197,7 @@ public class BandAdderPanel extends JPanel implements ActionListener, DocumentLi
 	public void actionPerformed(ActionEvent e) {
 		if(e.getSource()==btnSubmit) {
 			memberCounter = 0;
+			wScreen.submitBand(tfBandName.getText(), tfOrgin.getText(), memberList);
 			frame.dispose();
 			
 			// lägg till bandet samt dess medlemmar i DB

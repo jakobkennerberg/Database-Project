@@ -7,6 +7,8 @@ import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.ArrayList;
 
+import festival.BandMember;
+
 public class Communication {
 	private final String url = "jdbc:postgresql://pgserver.mah.se/jmy";
 	private final String userID = "ah8378";
@@ -54,6 +56,10 @@ public class Communication {
 		}
 		
 		return workers;
+	}
+	
+	public void insertBand(String bandname, String orgin, ArrayList<BandMember> members) {
+		
 	}
 	
 	/**

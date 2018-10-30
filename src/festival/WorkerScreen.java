@@ -128,6 +128,10 @@ public class WorkerScreen extends JPanel implements ActionListener {
 		return workerAmount;
 	}
 	
+	public void submitBand(String bandname, String orgin, ArrayList<BandMember> members) {
+		controller.addBand(bandname, orgin, members);
+	}
+	
 	public void checkIfGoodToGo() {
 		if(selectedWorker == true && selectedBand == true) {
 			btnSpecify.setEnabled(true);
