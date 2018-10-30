@@ -20,7 +20,10 @@ import javax.swing.JScrollPane;
 import javax.swing.JTextArea;
 import javax.swing.JViewport;
 
+import connection.Communication;
+
 public class VisitorScreen extends JPanel implements ActionListener {
+	private Communication dbManager;
 	private JLabel lblschedule = new JLabel("Schedule");
 	private JLabel lblinfo = new JLabel("Band Information");
 	private JButton btnView = new JButton("View Band Information");
@@ -34,11 +37,13 @@ public class VisitorScreen extends JPanel implements ActionListener {
 	
 	private int scheduleSize = 5;
 	
-	public VisitorScreen() {
+	public VisitorScreen(Communication comm) {
 		setPreferredSize(new Dimension(1000, 700));
 		setLayout(null);
 		add(leftPanel());
 		add(rightPanel());
+		dbManager = comm;
+		//read schedule
 		
 		btnView.addActionListener(this);
 		btnUp.addActionListener(this);
@@ -155,7 +160,7 @@ public class VisitorScreen extends JPanel implements ActionListener {
 		}
 	}
 		
-	public static void main(String[] args) {
-		VisitorScreen screen = new VisitorScreen();
-	}
+//	public static void main(String[] args) {
+//		VisitorScreen screen = new VisitorScreen();
+//	}
 }

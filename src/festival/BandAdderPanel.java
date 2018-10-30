@@ -210,7 +210,7 @@ public class BandAdderPanel extends JPanel implements ActionListener, DocumentLi
 		}
 	}
 	
-	public static void main(String[] args) {
-		BandAdderPanel bap = new BandAdderPanel(new WorkerScreen());
-	}
+//	public static void main(String[] args) {
+//		BandAdderPanel bap = new BandAdderPanel(new WorkerScreen());
+//	}
 }

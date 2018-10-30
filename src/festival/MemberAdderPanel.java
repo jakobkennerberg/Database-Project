@@ -160,7 +160,7 @@ public class MemberAdderPanel extends JPanel implements ActionListener, Document
 		}
 	}
 	
-	public static void main(String[] args) {
-		MemberAdderPanel panel = new MemberAdderPanel(new BandAdderPanel(new WorkerScreen()));
-	}
+//	public static void main(String[] args) {
+//		MemberAdderPanel panel = new MemberAdderPanel(new BandAdderPanel(new WorkerScreen()));
+//	}
 }

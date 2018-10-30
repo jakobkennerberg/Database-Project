@@ -31,6 +31,7 @@ public class ConcertPanel extends JPanel implements ActionListener {
 	private JLabel lblTime = new JLabel("Time");
 	private JLabel lblStage = new JLabel("Stage");
 	private JLabel lblDay = new JLabel("Day");
+	private CardController controller;
 	
 	private ImageIcon stageMallorca = new ImageIcon("files/MallorcaScene.jpg");
 	private ImageIcon stageDielsel = new ImageIcon("files/DieselTent.jpg");
@@ -40,10 +41,11 @@ public class ConcertPanel extends JPanel implements ActionListener {
 	private Timer timer;
 	
 	
-	public ConcertPanel() {
+	public ConcertPanel(CardController controller) {
 		setPreferredSize(new Dimension(1000, 700));
 		setBackground(Color.PINK);
 		setLayout(null);
+		controller = controller;
 		stageMallorca = scalePicture(stageMallorca);
 		stageDielsel = scalePicture(stageDielsel);
 		stageForum = scalePicture(stageForum);
@@ -188,15 +190,15 @@ public class ConcertPanel extends JPanel implements ActionListener {
 		}
 	}
 	
-	public static void main(String[] args) {
-		ConcertPanel panel = new ConcertPanel();
-		JFrame frame = new JFrame("Office Screen");
-		frame.setPreferredSize(new Dimension(1000, 700));
-		frame.pack();
-		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-		frame.add(panel);
-		frame.setVisible(true);
-		frame.setLocationRelativeTo(null);
-	}
+//	public static void main(String[] args) {
+//		ConcertPanel panel = new ConcertPanel();
+//		JFrame frame = new JFrame("Office Screen");
+//		frame.setPreferredSize(new Dimension(1000, 700));
+//		frame.pack();
+//		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+//		frame.add(panel);
+//		frame.setVisible(true);
+//		frame.setLocationRelativeTo(null);
+//	}
 
 }

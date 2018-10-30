@@ -6,14 +6,18 @@ import java.awt.Color;
 import javax.swing.JFrame;
 import javax.swing.JPanel;
 
+import connection.Communication;
+
 public class CardController extends JFrame implements CardSwitcher {
 	CardLayout cardLayout = new CardLayout();
 	private JPanel cards = new JPanel(cardLayout);
 	private String currentCard;
-	private ConcertPanel concertCard = new ConcertPanel();
-	private WorkerScreen workerCard = new WorkerScreen();
+	private ConcertPanel concertCard; // = new ConcertPanel();
+	private WorkerScreen workerCard; //= new WorkerScreen();
+	private Communication dbManager;
 	
-	public CardController() {
+	public CardController(Communication comm) {
+		dbManager = comm;
 		setUpCards();
 		currentCard = "workerScreen";
 		cardLayout.show(cards, currentCard);
@@ -27,12 +31,12 @@ public class CardController extends JFrame implements CardSwitcher {
 	
 	public void setUpCards() {
 		
-		workerCard = new WorkerScreen();
+		workerCard = new WorkerScreen(this);
 		workerCard.setListener(this);
 		JPanel cardWorker = new JPanel();
 		cardWorker.add(workerCard);
 		
-		concertCard = new ConcertPanel();
+		concertCard = new ConcertPanel(this);
 		concertCard.setListener(this);
 		JPanel cardConcert = new JPanel();
 		cardConcert.add(concertCard);

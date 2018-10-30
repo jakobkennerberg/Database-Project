@@ -12,6 +12,12 @@ public class Communication {
 	private final String userID = "ah8378";
 	private final String password = "2o0hd5wd";
 	
+	private int bandID = 0;
+	
+	public Communication() {
+		//bandID = read current bandId 
+	}
+	
 	public Connection connect() {
 		//testttt
 		Connection conn = null;

@@ -14,6 +14,8 @@ import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.SwingUtilities;
 
+import connection.Communication;
+
 public class AppStarter extends JPanel implements ActionListener {
 	private JLabel title = new JLabel("Welcome");
 	private JLabel lbldescribe = new JLabel("Made for demostrative purposes only");
@@ -24,8 +26,10 @@ public class AppStarter extends JPanel implements ActionListener {
 	private JButton visitorBtn;
 	private ImageIcon workerpic = new ImageIcon("files/serviceman.png");
 	private ImageIcon visitorpic = new ImageIcon("files/tourist.png");
+	private Communication dbManager;
 	
 	public AppStarter() {
+		dbManager = new Communication();
 		setLayout(null);
 		workerpic = scalePicture(workerpic);
 		visitorpic = scalePicture(visitorpic);
@@ -85,11 +89,11 @@ public class AppStarter extends JPanel implements ActionListener {
 	public void actionPerformed(ActionEvent e) {
 		if(e.getSource()==workerBtn) {
 			frame.dispose();
-			new CardController();
+			new CardController(dbManager);
 		}
 		if(e.getSource()==visitorBtn) {
 			frame.dispose();
-			new VisitorScreen();
+			new VisitorScreen(dbManager);
 		}
 	}
 	

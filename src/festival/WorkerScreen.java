@@ -16,7 +16,6 @@ import javax.swing.JRadioButton;
 import javax.swing.JScrollPane;
 
 public class WorkerScreen extends JPanel implements ActionListener {
-	
 	private CardSwitcher cardSwitcher;
 	private JPanel bandPanel;
 	private JPanel bandListPanel;
@@ -36,10 +35,12 @@ public class WorkerScreen extends JPanel implements ActionListener {
 	private String currentSelectedWorker;
 	private boolean selectedWorker = false;
 	private boolean selectedBand = false;
+	private CardController controller;
 	
-	public WorkerScreen() {
+	public WorkerScreen(CardController controller) {
 		setPreferredSize(new Dimension(1000, 700));
 		setLayout(null);
+		controller = controller;
 		setBackground(Color.PINK);
 		add(bandPanel());
 	}
@@ -164,8 +165,8 @@ public class WorkerScreen extends JPanel implements ActionListener {
 		}
 	}
 	
-	public static void main(String[] args) {
-		WorkerScreen screen = new WorkerScreen();
-	}
+//	public static void main(String[] args) {
+//		WorkerScreen screen = new WorkerScreen();
+//	}
 
 }
