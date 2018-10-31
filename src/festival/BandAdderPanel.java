@@ -199,11 +199,8 @@ public class BandAdderPanel extends JPanel implements ActionListener, DocumentLi
 			memberCounter = 0;
 			wScreen.submitBand(tfBandName.getText(), tfOrgin.getText(), memberList);
 			frame.dispose();
-			
-			// lägg till bandet samt dess medlemmar i DB
-			
-			//hehe
 		}
+		
 		if(e.getSource()==btnAdd) {
 			memberPanel = new MemberAdderPanel(this);
 			btnAdd.setEnabled(false);

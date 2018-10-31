@@ -45,7 +45,7 @@ public class ConcertPanel extends JPanel implements ActionListener {
 		setPreferredSize(new Dimension(1000, 700));
 		setBackground(Color.PINK);
 		setLayout(null);
-		controller = controller;
+		this.controller = controller;
 		stageMallorca = scalePicture(stageMallorca);
 		stageDielsel = scalePicture(stageDielsel);
 		stageForum = scalePicture(stageForum);

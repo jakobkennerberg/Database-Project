@@ -52,12 +52,12 @@ public class BandMember {
 		this.xtraInfo = xtraInfo;
 	}
 	
-	public void setBand(String band) {
-		this.band = band;
-	}
-	
-	public String getBand() {
-		return band;
-	}
+//	public void setBand(String band) {
+//		this.band = band;
+//	}
+//	
+//	public String getBand() {
+//		return band;
+//	}
 
 }

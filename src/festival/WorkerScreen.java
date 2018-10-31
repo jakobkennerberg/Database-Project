@@ -53,7 +53,7 @@ public class WorkerScreen extends JPanel implements ActionListener {
 		Font lblFont = new Font("SansSerif", Font.BOLD, 25);
 		
 		bandListPanel = new JPanel();
-		//bandListPanel.setLayout(new GridLayout(getBandListCount(), 1)); 
+		bandListPanel.setLayout(new GridLayout(getBandListCount(), 1)); 
 		JScrollPane bandScroll = new JScrollPane(bandListPanel);
 		bandScroll.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_ALWAYS);
 		bandScroll.setBounds(50, 75, 300, 500);
@@ -73,11 +73,11 @@ public class WorkerScreen extends JPanel implements ActionListener {
 		btnAddBand.setBounds(50, 600, 300, 50);
 		btnAddBand.addActionListener(this);
 		btnSpecify.setBounds(800,600,150,50);
-		//btnSpecify.setEnabled(false);
+		btnSpecify.setEnabled(false);
 		btnSpecify.addActionListener(this);
 		
 		setUpWorkerList(controller.getWorkerList());
-		//setUpBandList(controller.getBandList()); 
+		setUpBandList(controller.getBandList()); 
 		
 		bandPanel.add(btnSpecify);
 		bandPanel.add(btnAddBand);

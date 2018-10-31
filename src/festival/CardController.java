@@ -2,6 +2,7 @@ package festival;
 
 import java.awt.CardLayout;
 import java.awt.Color;
+import java.sql.SQLException;
 import java.util.ArrayList;
 
 import javax.swing.JFrame;
@@ -76,8 +77,17 @@ public class CardController extends JFrame implements CardSwitcher {
 		return list;
 	}
 	
-	public void addBand(String bandname, String orgin, ArrayList<BandMember> list) {
-		
+	public void addBand(String bandname, String orgin, ArrayList<BandMember> list) {	
+		try {
+			dbManager.insertBand(bandname, orgin, list);
+			for(BandMember mem : list) {
+				System.out.println(mem.getName());
+				dbManager.insertMember(mem.getName(), mem.getCountry(), mem.getInstrument(), mem.getXtraInfo());
+				System.out.println("igenom första loopen");
+			}
+		} catch (SQLException e) {
+			System.out.println(e);
+		}
 	}
 	
 	public void updateLabels(String band, String worker) {
