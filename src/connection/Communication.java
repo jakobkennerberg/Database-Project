@@ -15,6 +15,7 @@ public class Communication {
 	private final String password = "2o0hd5wd";
 	
 	private int bandID = 0;
+	private int memberID = 0;
 	
 	public Communication() {
 		//bandID = read current bandId 

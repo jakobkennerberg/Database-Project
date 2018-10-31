@@ -5,6 +5,7 @@ public class BandMember {
 	private String country;
 	private String instrument;
 	private String xtraInfo;
+	private String band;
 	
 	public BandMember(String name, String country, String instrument) {
 		this.name = name;
@@ -49,6 +50,14 @@ public class BandMember {
 
 	public void setXtraInfo(String xtraInfo) {
 		this.xtraInfo = xtraInfo;
+	}
+	
+	public void setBand(String band) {
+		this.band = band;
+	}
+	
+	public String getBand() {
+		return band;
 	}
 
 }
