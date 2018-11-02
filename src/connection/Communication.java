@@ -99,6 +99,15 @@ public class Communication {
 		return workers;
 	}
 	
+	public ArrayList<String> getSchedule() {
+		ArrayList<String> schedule = new ArrayList<String>();
+		
+		return schedule;
+	}
+	
+	public void insertConcert() {
+		
+	}
 	
 	/**
 	 * Inserts the created band into the db
@@ -146,7 +155,6 @@ public class Communication {
 		PreparedStatement pst2 = conn.prepareStatement(insertMO);
 		pst2.executeUpdate();
 	}
-	
 	
 	/**
 	 * Method used to control if the current artist already exists in the database
@@ -201,9 +209,18 @@ public class Communication {
 		return sameMusican;
 	}
 	
-	public void insertConcert() {
+	public ArrayList<BandMember> getBandMemberInfo(String bandName) {
+		ArrayList<BandMember> list = new ArrayList<BandMember>();
 		
+		return list;
 	}
+	
+	public ArrayList<String> getBandInfo(String bandname) {
+		ArrayList<String> info = new ArrayList<String>();
+		
+		return info;
+	}
+	
 	
 	/**
 	 * All the names of the workers

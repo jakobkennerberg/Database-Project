@@ -145,6 +145,7 @@ public class WorkerScreen extends JPanel implements ActionListener {
 			new BandAdderPanel(this);
 		}
 		if(e.getSource()==btnSpecify) {
+			controller.updateAvailible();
 			controller.updateLabels(currentSelectedBand, currentSelectedWorker);
 			cardSwitcher.nextPanel();
 			

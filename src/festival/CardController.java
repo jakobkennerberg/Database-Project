@@ -62,6 +62,10 @@ public class CardController extends JFrame implements CardSwitcher {
 		cardLayout.show(cards, currentCard);
 	}
 	
+	public void updateAvailible() {
+		
+	}
+	
 	public int getGridSize(String str) {
 		int gridSize = dbManager.getCount(str);
 		return gridSize;
