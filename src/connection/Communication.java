@@ -1,5 +1,6 @@
 package connection;
 
+import java.io.IOException;
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.PreparedStatement;
@@ -7,6 +8,10 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.ArrayList;
+
+import javax.swing.JLabel;
+import javax.swing.JOptionPane;
+import javax.swing.JPanel;
 
 import festival.BandMember;
 
@@ -108,7 +113,6 @@ public class Communication {
 		pst.executeUpdate();
 		currentBandID = bandID;
 		bandID++;
-		
 	}
 	
 	
@@ -129,7 +133,75 @@ public class Communication {
 		PreparedStatement pst2 = conn.prepareStatement(insertMO);
 		pst2.executeUpdate();
 		
-		memberID++;
+		memberID++;	
+	}
+	
+	/**
+	 * Method used only when the musican already exists in the database
+	 * @param sameID
+	 * @throws SQLException
+	 */
+	public void insertWhatBand(int sameID) throws SQLException {
+		String insertMO = "insert into MemberOf(bandid, memberid) values ('" + currentBandID + "', '" + sameID + "')";
+		PreparedStatement pst2 = conn.prepareStatement(insertMO);
+		pst2.executeUpdate();
+	}
+	
+	
+	/**
+	 * Method used to control if the current artist already exists in the database
+	 * @param name
+	 * @param country
+	 * @param instrument
+	 * @param xtraInfo
+	 * @throws SQLException
+	 */
+	public void memberControl(String name, String country, String instrument, String xtraInfo) throws SQLException {
+		String sameQuery = ""; //om det finns med samma namn
+		boolean sameMusican = false;
+		
+		PreparedStatement pst = conn.prepareStatement(sameQuery);
+		ResultSet rs = pst.executeQuery();
+		
+		while(rs.next()) {
+			int id = rs.getInt(1);
+			String duplicateName = rs.getString(2);
+			String band = rs.getString(3);
+			sameMusican = memberChooser(duplicateName, band);
+			
+			if(sameMusican == true) {
+				insertWhatBand(id);
+				break;
+			}
+		}
+		
+		if(sameMusican == false) {
+			insertMember(name, country, instrument, xtraInfo);
+		}
+	}
+	
+	/**
+	 * Method used to provide the user the oppertunity to choose if it is the same artist or a different with the same name
+	 * @param name
+	 * @param band
+	 * @return
+	 */
+	public boolean memberChooser(String name, String band) {
+		boolean sameMusican = false;
+		String[] options = {"Same musician", "Another musician"};
+		JPanel panel = new JPanel();
+		JLabel lbl = new JLabel("<html> There is already a " + name + " playing in <br>band name: "+ band + "</html>");
+		panel.add(lbl);
+		int selectedOption = JOptionPane.showOptionDialog(null, panel, "Knas",
+				JOptionPane.NO_OPTION, JOptionPane.QUESTION_MESSAGE, null, options , options[0]);
+		
+		if (selectedOption == JOptionPane.YES_OPTION) {	
+			sameMusican = true;
+		}
+		return sameMusican;
+	}
+	
+	public void insertConcert() {
 		
 	}
 	
@@ -168,11 +240,11 @@ public class Communication {
 		return bandNames;
 	}
 	
+	
 	/**
 	 * The numbers of either workers or bands, depending on the parameters
 	 * @return integer with Workers
 	 */
-	
 	public int getCount(String type) {
 		int count = 0;
 		String query = "";

@@ -81,9 +81,7 @@ public class CardController extends JFrame implements CardSwitcher {
 		try {
 			dbManager.insertBand(bandname, orgin, list);
 			for(BandMember mem : list) {
-				System.out.println(mem.getName());
-				dbManager.insertMember(mem.getName(), mem.getCountry(), mem.getInstrument(), mem.getXtraInfo());
-				System.out.println("igenom första loopen");
+				dbManager.memberControl(mem.getName(), mem.getCountry(), mem.getInstrument(), mem.getXtraInfo());
 			}
 		} catch (SQLException e) {
 			System.out.println(e);
