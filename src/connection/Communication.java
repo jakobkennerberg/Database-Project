@@ -26,6 +26,9 @@ public class Communication {
 	private int currentBandID = 0;
 	private String currentContact = "";
 	
+	/**
+	 * Constructor
+	 */
 	public Communication() {
 		try {
 			conn = connect();
@@ -36,6 +39,10 @@ public class Communication {
 		}	
 	}
 	
+	/**
+	 * Method used to connect to the database
+	 * @return
+	 */
 	public Connection connect() {
 		Connection conn = null;
 		try {
@@ -47,6 +54,7 @@ public class Communication {
 		}
  		return conn;
 	}
+	
 	/**
 	 * Initiate the values for the IDs so the can stay unique
 	 * @throws SQLException
@@ -146,7 +154,7 @@ public class Communication {
 	}
 	
 	/**
-	 * Method used only when the musican already exists in the database
+	 * Method used only when the musican already exists in the database(inserts only in memberof)
 	 * @param sameID
 	 * @throws SQLException
 	 */
@@ -189,7 +197,7 @@ public class Communication {
 	}
 	
 	/**
-	 * Method used to provide the user the oppertunity to choose if it is the same artist or a different with the same name
+	 * Method used to provide the user with the opportunity to choose if it is the same artist or a different with the same name
 	 * @param name
 	 * @param band
 	 * @return
@@ -209,18 +217,36 @@ public class Communication {
 		return sameMusican;
 	}
 	
+	/**
+	 * Method used to collect the info about the bandmembers when asked for (Visitor side)
+	 * @param bandName
+	 * @return
+	 */
 	public ArrayList<BandMember> getBandMemberInfo(String bandName) {
 		ArrayList<BandMember> list = new ArrayList<BandMember>();
 		
 		return list;
 	}
 	
+	/**
+	 * Method used to collect the info about the band when asked for (Visitor side)
+	 * @param bandname
+	 * @return
+	 */
 	public ArrayList<String> getBandInfo(String bandname) {
 		ArrayList<String> info = new ArrayList<String>();
 		
 		return info;
 	}
 	
+	
+	
+	/**
+	 * Method used to insert an assigned contactperson and the selected unassigned band in the db
+	 * @param band
+	 * @param worker
+	 * @throws SQLException
+	 */
 	public void insertContact(String band, String worker) throws SQLException {
 		String queryBandID = "select bandid from band where bandname = '"+band+"'";
 		String queryWorkerID = "select workerid from worker where name='"+worker+"'"; //person nummer??
@@ -246,8 +272,16 @@ public class Communication {
 		pst3.executeUpdate();
 	}
 	
+	
+	/**
+	 * Method used to check if a band has a contactperson assigned to them
+	 * @param bandname
+	 * @return
+	 * @throws SQLException
+	 */
 	public boolean checkContact(String bandname)throws SQLException {
 		String checkQuery = "Select worker.workerid, worker.name from worker join contactperson on worker.workerid=contactperson.workerid join band on contactperson.bandid=band.bandid where band.bandname='"+bandname+"'";
+		//Do we need worker.workerid??
 		boolean assigned = false;
 		
 		PreparedStatement pst = conn.prepareStatement(checkQuery);
@@ -260,7 +294,10 @@ public class Communication {
 		return assigned;
 	}
 	
-	
+	/**
+	 * Method used to get the latest checked/assigned contactpersons name
+	 * @return
+	 */
 	public String getContactName() {
 		return this.currentContact;
 	}
