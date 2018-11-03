@@ -24,6 +24,7 @@ public class Communication {
 	private int memberID = 0;
 	private Connection conn;
 	private int currentBandID = 0;
+	private String currentContact = "";
 	
 	public Communication() {
 		try {
@@ -34,7 +35,6 @@ public class Communication {
 			System.out.println(e.getMessage());
 		}	
 	}
-	
 	
 	public Connection connect() {
 		Connection conn = null;
@@ -219,6 +219,50 @@ public class Communication {
 		ArrayList<String> info = new ArrayList<String>();
 		
 		return info;
+	}
+	
+	public void insertContact(String band, String worker) throws SQLException {
+		String queryBandID = "select bandid from band where bandname = '"+band+"'";
+		String queryWorkerID = "select workerid from worker where name='"+worker+"'"; //person nummer??
+		int insertBandID = 0;
+		int insertWorkerID = 0;
+		
+		PreparedStatement pst = conn.prepareStatement(queryBandID);
+		ResultSet rs = pst.executeQuery();
+		while(rs.next()) {
+			insertBandID = rs.getInt("bandid");
+		}
+		
+		PreparedStatement pst2 = conn.prepareStatement(queryWorkerID);
+		ResultSet rs2 = pst2.executeQuery();
+		while(rs2.next()) {
+			insertWorkerID = rs2.getInt("workerid");
+		}
+		
+		String insertContact = "insert into contactperson(workerid, bandid) values ('"+insertWorkerID+"', '"+insertBandID+"')";
+		currentContact = worker;
+				
+		PreparedStatement pst3 = conn.prepareStatement(insertContact);
+		pst3.executeUpdate();
+	}
+	
+	public boolean checkContact(String bandname)throws SQLException {
+		String checkQuery = "Select worker.workerid, worker.name from worker join contactperson on worker.workerid=contactperson.workerid join band on contactperson.bandid=band.bandid where band.bandname='"+bandname+"'";
+		boolean assigned = false;
+		
+		PreparedStatement pst = conn.prepareStatement(checkQuery);
+		ResultSet rs = pst.executeQuery();
+		
+		while(rs.next()) {
+			currentContact = rs.getString("name");
+			assigned = true;
+		}
+		return assigned;
+	}
+	
+	
+	public String getContactName() {
+		return this.currentContact;
 	}
 	
 	

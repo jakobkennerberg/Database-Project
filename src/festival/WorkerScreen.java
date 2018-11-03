@@ -22,8 +22,9 @@ public class WorkerScreen extends JPanel implements ActionListener {
 	private JPanel workerListPanel;
 	private JLabel lblBand = new JLabel("Bands");
 	private JLabel lblWorker = new JLabel("Assign Contact person");
+	private JLabel lblAssigned = new JLabel("Assigned:");
 	private JButton btnAddBand = new JButton("Add Band");
-	private JButton btnSpecify = new JButton("Specify Concert");
+	private JButton btnAssign = new JButton("Assign");
 	
 	private int bandAmount = 0;
 	private int workerAmount = 0;
@@ -35,6 +36,7 @@ public class WorkerScreen extends JPanel implements ActionListener {
 	private String currentSelectedWorker;
 	private boolean selectedWorker = false;
 	private boolean selectedBand = false;
+	private boolean assigned = false;
 	private CardController controller;
 	
 	public WorkerScreen(CardController controller) {
@@ -72,14 +74,18 @@ public class WorkerScreen extends JPanel implements ActionListener {
 		
 		btnAddBand.setBounds(50, 600, 300, 50);
 		btnAddBand.addActionListener(this);
-		btnSpecify.setBounds(800,600,150,50);
-		btnSpecify.setEnabled(false);
-		btnSpecify.addActionListener(this);
+		btnAssign.setBounds(800,600,150,50);
+		btnAssign.setEnabled(false);
+		btnAssign.addActionListener(this);
 		
-		setUpWorkerList(controller.getWorkerList());
+		lblAssigned.setBounds(450, 600, 300, 50);
+		lblAssigned.setFont(lblFont);
+		
+		setUpWorkerList(controller.getWorkerList(), false);
 		setUpBandList(getBandList()); 
 		
-		bandPanel.add(btnSpecify);
+		bandPanel.add(lblAssigned);
+		bandPanel.add(btnAssign);
 		bandPanel.add(btnAddBand);
 		bandPanel.add(lblBand);
 		bandPanel.add(lblWorker);
@@ -114,10 +120,15 @@ public class WorkerScreen extends JPanel implements ActionListener {
 		}
 	}
 	
-	public void setUpWorkerList(ArrayList<String> workerList) {
+	public void setUpWorkerList(ArrayList<String> workerList, boolean value) {
+		workerListPanel.removeAll();
+		workerListPanel.setLayout(new GridLayout(getWorkerListCount(), 1));
+		workerListPanel.repaint();
+		
 		for (int i = 0; i < workerList.size(); i++) {
 			JRadioButton btn = new JRadioButton(workerList.get(i));
 			btn.setSize(new Dimension(300, 80));
+			btn.setEnabled(value);
 			workerbg.add(btn);
 			btn.addActionListener(rbWorker);
 			workerListPanel.add(btn);
@@ -140,9 +151,20 @@ public class WorkerScreen extends JPanel implements ActionListener {
 	
 	public void checkIfGoodToGo() {
 		if(selectedWorker == true && selectedBand == true) {
-			btnSpecify.setEnabled(true);
+			btnAssign.setEnabled(true);
+		}
+	}
+	
+	public void setAssigned(String name, boolean value) {
+		lblAssigned.setText("Assigned: " + name);
+		btnAssign.setEnabled(value);
+		
+		if(value == false) {
+			selectedWorker = false;
+			assigned = false;
 		} else {
-			btnSpecify.setEnabled(false);
+			assigned = true;
+			
 		}
 	}
 
@@ -150,11 +172,13 @@ public class WorkerScreen extends JPanel implements ActionListener {
 		if(e.getSource()==btnAddBand) {
 			new BandAdderPanel(this);
 		}
-		if(e.getSource()==btnSpecify) {
-			controller.updateAvailible();
+		if(e.getSource()==btnAssign) {
+			if(assigned == false) {
+				controller.assignContact(currentSelectedBand, currentSelectedWorker);
+			}
+			controller.updateAvailible(); //uppdatera concert panels värden
 			controller.updateLabels(currentSelectedBand, currentSelectedWorker);
 			cardSwitcher.nextPanel();
-			
 		}
 	}
 	
@@ -173,6 +197,7 @@ public class WorkerScreen extends JPanel implements ActionListener {
 		public void actionPerformed(ActionEvent e) {
 			JRadioButton rb = (JRadioButton)e.getSource();
 			currentSelectedBand = rb.getText();
+			controller.checkContact(currentSelectedBand);
 			selectedBand = true;
 			checkIfGoodToGo();
 		}

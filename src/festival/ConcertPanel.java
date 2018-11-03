@@ -134,6 +134,7 @@ public class ConcertPanel extends JPanel implements ActionListener {
 
 	public void actionPerformed(ActionEvent e) {
 		if(e.getSource()==btnBack) {
+			controller.setAlreadyAssigned();
 			cardSwitcher.goBack();
 		}
 		if(e.getSource()==btnPublish) {

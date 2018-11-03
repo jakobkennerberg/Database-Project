@@ -66,6 +66,30 @@ public class CardController extends JFrame implements CardSwitcher {
 		
 	}
 	
+	public void assignContact(String band, String contact) {
+		try {
+			dbManager.insertContact(band, contact);
+		} catch (SQLException e) {}
+	}
+	
+	public void checkContact(String bandname) {
+		try {
+			boolean assigned = dbManager.checkContact(bandname);
+			if(assigned == true) {
+				setAlreadyAssigned();
+			} else if(assigned == false) {
+				workerCard.setAssigned("-", false);
+				workerCard.setUpWorkerList(dbManager.getWorkerNameList(), true);
+			}
+		} catch (SQLException e) {
+		}
+	}
+	
+	public void setAlreadyAssigned() {
+		workerCard.setAssigned(dbManager.getContactName(), true);
+		workerCard.setUpWorkerList(dbManager.getWorkerNameList(), false);
+	}
+	
 	public int getGridSize(String str) {
 		int gridSize = dbManager.getCount(str);
 		return gridSize;
