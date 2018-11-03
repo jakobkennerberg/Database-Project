@@ -198,6 +198,7 @@ public class BandAdderPanel extends JPanel implements ActionListener, DocumentLi
 		if(e.getSource()==btnSubmit) {
 			memberCounter = 0;
 			wScreen.submitBand(tfBandName.getText(), tfOrgin.getText(), memberList);
+			wScreen.setUpBandList(wScreen.getBandList());
 			frame.dispose();
 		}
 		

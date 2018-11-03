@@ -71,8 +71,8 @@ public class CardController extends JFrame implements CardSwitcher {
 		return gridSize;
 	}
 	
-	public ArrayList<String> getBandList() {
-		ArrayList<String> list = dbManager.getBandNameList();
+	public ArrayList<String> getBandList(ArrayList<String> list ) {
+		list = dbManager.getBandNameList();
 		return list;
 	}
 	

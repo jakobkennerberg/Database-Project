@@ -77,7 +77,7 @@ public class WorkerScreen extends JPanel implements ActionListener {
 		btnSpecify.addActionListener(this);
 		
 		setUpWorkerList(controller.getWorkerList());
-		setUpBandList(controller.getBandList()); 
+		setUpBandList(getBandList()); 
 		
 		bandPanel.add(btnSpecify);
 		bandPanel.add(btnAddBand);
@@ -92,6 +92,12 @@ public class WorkerScreen extends JPanel implements ActionListener {
 	
 	public void setListener(CardSwitcher listener) {
 		cardSwitcher = listener;
+	}
+	
+	public ArrayList<String> getBandList() {
+		ArrayList<String> list = new ArrayList<String>();
+		list = controller.getBandList(list);
+		return list;
 	}
 	
 	public void setUpBandList(ArrayList<String> bandList) {

@@ -165,7 +165,7 @@ public class Communication {
 	 * @throws SQLException
 	 */
 	public void memberControl(String name, String country, String instrument, String xtraInfo) throws SQLException {
-		String sameQuery = ""; //om det finns med samma namn
+		String sameQuery = "Select memberof.memberID, member.name, band.bandname from Memberof join member on memberof.memberID = member.memberID join band on memberof.bandID=band.bandID where member.name = '"+name+"'";
 		boolean sameMusican = false;
 		
 		PreparedStatement pst = conn.prepareStatement(sameQuery);

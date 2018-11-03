@@ -76,9 +76,9 @@ public class ConcertPanel extends JPanel implements ActionListener {
 		dayBox.addItem("Friday");
 		dayBox.addItem("Saturday");
 		
-		lblTime.setBounds(30, 200, 200, 50);
+		lblTime.setBounds(30, 300, 200, 50); 
 		lblTime.setFont(lblFont);
-		timeBox.setBounds(25, 235, 200, 50);
+		timeBox.setBounds(25, 335, 200, 50); 
 		timeBox.addItem("13.00 - 15.00");
 		timeBox.addItem("16.00 - 18.00");
 		timeBox.addItem("19.00 - 21.00");
@@ -86,9 +86,9 @@ public class ConcertPanel extends JPanel implements ActionListener {
 		timeBox.addItem("01.00 - 03.00");
 		
 		
-		lblStage.setBounds(30, 300, 200, 50);
+		lblStage.setBounds(30, 200, 200, 50); 
 		lblStage.setFont(lblFont);
-		stageBox.setBounds(25, 335, 200, 50);
+		stageBox.setBounds(25, 235, 200, 50); 
 		stageBox.addItem("Mallorca Stage");
 		stageBox.addItem("Diesel Tent");
 		stageBox.addItem("Forum Stage");
