@@ -113,8 +113,28 @@ public class Communication {
 		return schedule;
 	}
 	
-	public void insertConcert() {
+	public ArrayList<String> getBookedTimes(String day, String stage) throws SQLException {
+		String bookedQuery = "Select ";
+		ArrayList<String> bookedTimes = new ArrayList<String>();
 		
+		PreparedStatement pst = conn.prepareStatement(bookedQuery);
+		ResultSet rs = pst.executeQuery();
+		
+		while(rs.next()) {
+			String bookedConcert = rs.getString("starttime") + " - " + rs.getString("endtime"); //lägg ihop start o endtime till ex 15.00 - 17.00
+			bookedTimes.add(bookedConcert);
+		}
+		
+		return bookedTimes;
+		
+		
+	}
+	
+	public void insertConcert(String band, String day, String stage, String time) throws SQLException {
+		String insertConcert = "";
+		
+		PreparedStatement pst = conn.prepareStatement(insertConcert);
+		pst.executeUpdate();
 	}
 	
 	/**

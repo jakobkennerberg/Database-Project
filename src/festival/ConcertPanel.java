@@ -6,6 +6,7 @@ import java.awt.Font;
 import java.awt.Image;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.util.ArrayList;
 
 import javax.swing.BorderFactory;
 import javax.swing.ImageIcon;
@@ -39,6 +40,8 @@ public class ConcertPanel extends JPanel implements ActionListener {
 	private ImageIcon stageIbiza = new ImageIcon("files/IbizaScene.jpg");
 	Font lblFont = new Font("SansSerif", Font.BOLD, 20);
 	private Timer timer;
+	private String selectedBand;
+	private ArrayList<String> times = new ArrayList<String>();
 	
 	
 	public ConcertPanel(CardController controller) {
@@ -75,17 +78,7 @@ public class ConcertPanel extends JPanel implements ActionListener {
 		dayBox.addItem("Thursday");
 		dayBox.addItem("Friday");
 		dayBox.addItem("Saturday");
-		
-		lblTime.setBounds(30, 300, 200, 50); 
-		lblTime.setFont(lblFont);
-		timeBox.setBounds(25, 335, 200, 50); 
-		timeBox.addItem("13.00 - 15.00");
-		timeBox.addItem("16.00 - 18.00");
-		timeBox.addItem("19.00 - 21.00");
-		timeBox.addItem("22.00 - 24.00");
-		timeBox.addItem("01.00 - 03.00");
-		
-		
+			
 		lblStage.setBounds(30, 200, 200, 50); 
 		lblStage.setFont(lblFont);
 		stageBox.setBounds(25, 235, 200, 50); 
@@ -103,6 +96,19 @@ public class ConcertPanel extends JPanel implements ActionListener {
 		String selectedStage = (String) stageBox.getSelectedItem();
 		stageSelector(selectedStage);
 		stagePanel.add(lblStagePic);
+		
+		lblTime.setBounds(30, 300, 200, 50); 
+		lblTime.setFont(lblFont);
+		timeBox.setBounds(25, 335, 200, 50); 
+		
+		setUpTimes();
+		//getBookedTime((String)dayBox.getSelectedItem(), (String)stageBox.getSelectedItem());
+		
+//		timeBox.addItem("13.00 - 15.00");
+//		timeBox.addItem("16.00 - 18.00");
+//		timeBox.addItem("19.00 - 21.00");
+//		timeBox.addItem("22.00 - 24.00");
+//		timeBox.addItem("01.00 - 03.00");
 		
 		panel.add(lblDay);
 		panel.add(lblStage);
@@ -124,12 +130,44 @@ public class ConcertPanel extends JPanel implements ActionListener {
 		cardSwitcher = listener;
 	}
 	
-	public void setBandLabel(String str) {
-		lblBand.setText("Band: " + str);
+	public void setBandLabel(String bandname) {
+		lblBand.setText("Band: " + bandname);
+		selectedBand = bandname;
 	}
 	
 	public void setContactLabel(String str) {
 		lblContactPerson.setText("Contact person: " + str);
+	}
+	
+	public void updateAvailible(ArrayList<String> bookedTimes) {
+		timeBox.removeAllItems();
+		boolean eraseTime = false;
+		for(int i = 0; i < times.size(); i++) {
+			String currentTime = times.get(i);
+			for(int j = 0; j < bookedTimes.size(); j++) {
+				if(currentTime.equals(bookedTimes.get(j))) {
+					eraseTime = true;
+					break;
+				}
+			}
+			if(eraseTime == false) {
+				timeBox.addItem(currentTime);
+			}
+			eraseTime = false;
+		}
+		if(timeBox.getItemCount()< 1) {
+			btnPublish.setEnabled(false);
+		} else if(timeBox.getItemCount() > 0) {
+			btnPublish.setEnabled(true);
+		}
+	}
+	
+	public void setUpTimes() {
+		times.add("13.00 - 15.00");
+		times.add("16.00 - 18.00");
+		times.add("19.00 - 21.00");
+		times.add("22.00 - 24.00");
+		times.add("01.00 - 03.00");
 	}
 
 	public void actionPerformed(ActionEvent e) {
@@ -138,10 +176,11 @@ public class ConcertPanel extends JPanel implements ActionListener {
 			cardSwitcher.goBack();
 		}
 		if(e.getSource()==btnPublish) {
+			controller.specifyConcert(selectedBand, (String)dayBox.getSelectedItem(), (String)stageBox.getSelectedItem(), (String)timeBox.getSelectedItem());
 			btnPublish.setText("Published");
 			btnPublish.setForeground(Color.GREEN);
 			
-			timer = new Timer(3000, new ActionListener() {
+			timer = new Timer(2000, new ActionListener() {
 				public void actionPerformed(ActionEvent e) {
 					cardSwitcher.goBack();
 					stopTimer();	
@@ -150,8 +189,12 @@ public class ConcertPanel extends JPanel implements ActionListener {
 			timer.start();
 		}
 		if(e.getSource()==stageBox) {
+			getBookedTime((String)dayBox.getSelectedItem(), (String)stageBox.getSelectedItem());
 			String stage = (String)stageBox.getSelectedItem();
 			stageSelector(stage);
+		}
+		if(e.getSource()==dayBox) {
+			getBookedTime((String)dayBox.getSelectedItem(), (String)stageBox.getSelectedItem());
 		}
 		
 	}
@@ -189,6 +232,10 @@ public class ConcertPanel extends JPanel implements ActionListener {
 		}
 		break;
 		}
+	}
+	
+	public void getBookedTime(String day, String scene) {
+		controller.getBookedTimes(day, scene);
 	}
 	
 //	public static void main(String[] args) {

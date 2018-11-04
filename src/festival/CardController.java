@@ -62,8 +62,19 @@ public class CardController extends JFrame implements CardSwitcher {
 		cardLayout.show(cards, currentCard);
 	}
 	
-	public void updateAvailible() {
-		
+	public void getBookedTimes(String day, String stage) {
+		//behöver jag göra om dagen till id???
+		try {
+			ArrayList<String> booked = dbManager.getBookedTimes(day, stage);
+			concertCard.updateAvailible(booked);
+		}catch (SQLException e) {}
+	}
+	
+	public void specifyConcert(String band, String day, String stage, String time) {
+		try {
+			dbManager.insertConcert(band, day, stage, time);
+		} catch (SQLException e) {
+		}
 	}
 	
 	public void assignContact(String band, String contact) {
