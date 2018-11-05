@@ -63,16 +63,32 @@ public class CardController extends JFrame implements CardSwitcher {
 	}
 	
 	public void getBookedTimes(String day, String stage) {
-		//behöver jag göra om dagen till id???
+		int stageID = 0;
+		int dayID = 0;
+		dayID = getDayID(day);
+		stageID = getStageID(stage);
+
 		try {
-			ArrayList<String> booked = dbManager.getBookedTimes(day, stage);
+			ArrayList<String> booked = dbManager.getBookedTimes(dayID, stageID);
 			concertCard.updateAvailible(booked);
 		}catch (SQLException e) {}
 	}
 	
 	public void specifyConcert(String band, String day, String stage, String time) {
+		int bandID = 0;
+		int dayID = 0;
+		int stageID = 0;
+		String divide = time;
+		String parts[] = divide.split(" - ");
+		String starttime= parts[0];
+		String endtime = parts[1];
+		
+		dayID = getDayID(day);
+		stageID = getStageID(stage);
+		
 		try {
-			dbManager.insertConcert(band, day, stage, time);
+			bandID = dbManager.getBandID(band);
+			dbManager.insertConcert(bandID, dayID, stageID, starttime, endtime);
 		} catch (SQLException e) {
 		}
 	}
@@ -125,6 +141,51 @@ public class CardController extends JFrame implements CardSwitcher {
 		} catch (SQLException e) {
 			System.out.println(e);
 		}
+	}
+	
+	public int getStageID(String stage) {
+		int stageID = 0;
+		switch(stage) {
+		
+		case "Mallorca Stage" : {
+			stageID = 1;
+		}
+		break;
+		case "Diesel Tent" : {
+			stageID = 2;
+		}
+		break;
+		case "Forum Stage" : {
+			stageID = 3;
+		}
+		break;
+		case "Ibiza Stage" : {
+			stageID = 4;
+		}
+		break;
+		}
+		return stageID;
+	}
+	
+	public int getDayID(String day) {
+		int dayID = 0;
+		switch(day) {
+		
+		case "Thursday" : {
+			dayID = 1;
+		}
+		break;
+		case "Friday" : {
+			dayID = 2;
+		}
+		break;
+		case "Saturday" : {
+			dayID = 3;
+		}
+		break;
+		}
+		
+		return dayID;
 	}
 	
 	public void updateLabels(String band, String worker) {

@@ -113,7 +113,7 @@ public class Communication {
 		return schedule;
 	}
 	
-	public ArrayList<String> getBookedTimes(String day, String stage) throws SQLException {
+	public ArrayList<String> getBookedTimes(int day, int stage) throws SQLException {
 		String bookedQuery = "Select ";
 		ArrayList<String> bookedTimes = new ArrayList<String>();
 		
@@ -130,11 +130,15 @@ public class Communication {
 		
 	}
 	
-	public void insertConcert(String band, String day, String stage, String time) throws SQLException {
+	public void insertConcert(int bandid, int dayid, int stageid, String starttime, String endtime) throws SQLException {
 		String insertConcert = "";
 		
 		PreparedStatement pst = conn.prepareStatement(insertConcert);
 		pst.executeUpdate();
+	}
+	
+	public void getBandSpecificTimes(String bandname) throws SQLException  {
+		
 	}
 	
 	/**
@@ -358,6 +362,19 @@ public class Communication {
 		return bandNames;
 	}
 	
+	public int getBandID(String bandname) throws SQLException {
+		String idQuery = "Select bandid from band where bandname='" +bandname+"'";
+		int bandID = 0;
+		
+		PreparedStatement pst = conn.prepareStatement(idQuery);
+		ResultSet rs = pst.executeQuery();
+		
+		while(rs.next()) {
+			bandID = rs.getInt("bandid");
+		}
+		
+		return bandID;
+	}
 	
 	/**
 	 * The numbers of either workers or bands, depending on the parameters
