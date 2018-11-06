@@ -15,13 +15,17 @@ public class SchedulePanel extends JPanel {
 	private JLabel lblbandName;
 	private JLabel lblweekday;
 	private JPanel picturePanel;
-	private String weekday = "Wednesday";
-	private String time = "15.00 - 17.00";
-	private String stage = "Ibiza";
-	private String bandName = "Yuns pågar";
+	private String weekday;
+	private String time;
+	private String stage;
+	private String bandName;
 	private Random rand = new Random();
 	
-	public SchedulePanel(JRadioButton btn) {
+	public SchedulePanel(String scene, String bandname, int day, String starttime, String endtime) {
+		weekday = getDay(day);
+		time = starttime + " - " + endtime;
+		bandName = bandname;
+		stage = scene;
 		lblTime = new JLabel(time);
 		lblStage = new JLabel(stage);
 		lblbandName = new JLabel(bandName);
@@ -36,18 +40,36 @@ public class SchedulePanel extends JPanel {
 		lblStage.setBounds(30, 51, 200, 21);
 		lblbandName.setBounds(30, 72, 200, 21);
 		
-		btn.setBounds(280, 20, 65, 65);
+		//btn.setBounds(280, 20, 65, 65);
 		
 		picturePanel = new JPanel();
 		picturePanel.setBounds(200, 20, 65, 65);
 		picturePanel.setBackground(randomColor());
 		
-		add(btn);
+		//add(btn);
 		add(picturePanel);
 		add(lblTime);
 		add(lblStage);
 		add(lblbandName);	
 		add(lblweekday);
+	}
+	
+	public String getBandname() {
+		return this.bandName;
+	}
+	
+	public int getDay() {
+		int dayID = Integer.parseInt(weekday);
+		return dayID;
+	}
+	
+	public void addRadioButton(JRadioButton btn) {
+		btn.setBounds(280, 20, 65, 65);
+		add(btn);
+	}
+	
+	public void setWeekday(String weekday) {
+		this.weekday = weekday;
 	}
 	
 	public Color randomColor() {
@@ -56,5 +78,26 @@ public class SchedulePanel extends JPanel {
 		float b = rand.nextFloat();
 		Color color = new Color(r, g, b);
 		return color;
+	}
+	
+	public String getDay(int id) {
+		String day = "";
+		switch(id) {
+		
+		case 1: {
+			day = "Thursday" ;
+		}
+		break;
+		case 2 : {
+			day = "Friday";
+		}
+		break;
+		case 3 : {
+			day = "Saturday";
+		}
+		break;
+		}
+		
+		return day;
 	}
 }

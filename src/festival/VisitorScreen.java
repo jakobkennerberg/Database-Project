@@ -7,6 +7,7 @@ import java.awt.Font;
 import java.awt.GridLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.util.ArrayList;
 import java.util.Random;
 
 import javax.swing.BorderFactory;
@@ -23,7 +24,7 @@ import javax.swing.JViewport;
 import connection.Communication;
 
 public class VisitorScreen extends JPanel implements ActionListener {
-	private Communication dbManager;
+	private VisitorController controller;
 	private JLabel lblschedule = new JLabel("Schedule");
 	private JLabel lblinfo = new JLabel("Band Information");
 	private JButton btnView = new JButton("View Band Information");
@@ -34,16 +35,18 @@ public class VisitorScreen extends JPanel implements ActionListener {
 	private ButtonGroup bg = new ButtonGroup();
 	private RadioButtonListener rbgroup = new RadioButtonListener();
 	private String currentChosenBand;
+	private ArrayList<SchedulePanel> scheduleList = new ArrayList<SchedulePanel>();
 	
 	private int scheduleSize = 5;
 	
-	public VisitorScreen(Communication comm) {
+	public VisitorScreen(VisitorController controller) {
 		setPreferredSize(new Dimension(1000, 700));
 		setLayout(null);
+		this.controller = controller;
 		add(leftPanel());
 		add(rightPanel());
-		dbManager = comm;
-		//read schedule
+		scheduleList = controller.getSchedule(scheduleList);
+		updateSchedule(scheduleList);
 		
 		btnView.addActionListener(this);
 		btnUp.addActionListener(this);
@@ -72,7 +75,7 @@ public class VisitorScreen extends JPanel implements ActionListener {
 //		vp.setBounds(175, 90, 325, 500);
 //		scroll.setBounds(175, 90, 325, 500);
 		
-		updateSchedule("hahhahahhhaahhahhahah");
+//		updateSchedule("hahhahahhhaahhahhahah");
 		btnUp.setBounds(175, 25, 325, 50);
 		btnUp.setEnabled(false);
 		btnDown.setBounds(175, 600, 325, 50);
@@ -106,17 +109,27 @@ public class VisitorScreen extends JPanel implements ActionListener {
 		return panel;
 	}
 	
-	public void updateSchedule(String bandname) {
-		for(int i = 0; i < scheduleSize; i++) {
+	public void updateSchedule(ArrayList<SchedulePanel> list) {
+		for(SchedulePanel panel : list) {
 			JRadioButton btn = new JRadioButton();
 			btn.addActionListener(rbgroup);
-			btn.setText(bandname);
+			btn.setText(panel.getBandname());
 			btn.setForeground(Color.WHITE);
 			bg.add(btn);
-			SchedulePanel panel = new SchedulePanel(btn);
+			panel.addRadioButton(btn);
 			//panel.setSize(325, 65);
 			schedulePanel.add(panel);
 		}
+//		for(int i = 0; i < scheduleSize; i++) {
+//			JRadioButton btn = new JRadioButton();
+//			btn.addActionListener(rbgroup);
+//			btn.setText(bandname);
+//			btn.setForeground(Color.WHITE);
+//			bg.add(btn);
+//			SchedulePanel panel = new SchedulePanel(btn);
+//			//panel.setSize(325, 65);
+//			schedulePanel.add(panel);
+//		}
 	}
 	
 	public int getScheduleSize() {
@@ -137,6 +150,9 @@ public class VisitorScreen extends JPanel implements ActionListener {
 	
 	public void actionPerformed(ActionEvent e) {
 		if(e.getSource()==btnView) {
+			informationArea.setText("");
+			controller.getBandInfo(currentChosenBand);
+			controller.getBandMemberInfo(currentChosenBand);
 			//begär band info med hjälp av bandnamnet
 		}
 		if(e.getSource()==btnUp) {

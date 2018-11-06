@@ -15,6 +15,8 @@ import javax.swing.JPanel;
 
 import festival.BandMember;
 import festival.BandSpecificTime;
+import festival.ConcertPanel;
+import festival.SchedulePanel;
 
 public class Communication {
 	private final String url = "jdbc:postgresql://pgserver.mah.se/jmy";
@@ -108,8 +110,14 @@ public class Communication {
 		return workers;
 	}
 	
-	public ArrayList<String> getSchedule() {
-		ArrayList<String> schedule = new ArrayList<String>();
+	public ArrayList<SchedulePanel> getSchedule(ArrayList<SchedulePanel> schedule) throws SQLException {
+		String scheduleQuery = "Select scene.scenename, band.bandname, cs.day, cs.starttime, cs.endtime from ConcertSchedule AS cs join band on band.bandid = cs.bandid join scene on scene.scenenumber=cs.sceneid order by cs.day ASC, cs.starttime ASC";
+		PreparedStatement pst = conn.prepareStatement(scheduleQuery);
+		ResultSet rs = pst.executeQuery();
+		
+		while(rs.next()) {
+			schedule.add(new SchedulePanel(rs.getString("scenename"), rs.getString("bandname"), rs.getInt("day"), rs.getString("starttime"), rs.getString("endtime")));
+		}
 		
 		return schedule;
 	}
@@ -137,6 +145,7 @@ public class Communication {
 		PreparedStatement pst = conn.prepareStatement(insertConcert);
 		pst.executeUpdate();
 	}
+	
 	
 	public ArrayList<BandSpecificTime> getBandSpecificTimes(String bandname) throws SQLException  {
 		String bandTimesQuery = "select cs.day, cs.starttime, cs.endtime from ConcertSchedule AS cs join band on cs.bandID=band.bandid where bandname='"+bandname+"'";

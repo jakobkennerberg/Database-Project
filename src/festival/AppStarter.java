@@ -93,7 +93,7 @@ public class AppStarter extends JPanel implements ActionListener {
 		}
 		if(e.getSource()==visitorBtn) {
 			frame.dispose();
-			new VisitorScreen(dbManager);
+			new VisitorController(dbManager);
 		}
 	}
 	
