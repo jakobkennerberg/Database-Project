@@ -177,9 +177,9 @@ public class WorkerScreen extends JPanel implements ActionListener {
 			if(assigned == false) {
 				controller.assignContact(currentSelectedBand, currentSelectedWorker);
 			}
-			//controller.updateAvailible(); //uppdatera concert panels värden
 			controller.updateLabels(currentSelectedBand, currentSelectedWorker);
 			cardSwitcher.nextPanel();
+			controller.updateAvailible();
 		}
 	}
 	

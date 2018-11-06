@@ -78,8 +78,7 @@ public class CardController extends JFrame implements CardSwitcher {
 		int bandID = 0;
 		int dayID = 0;
 		int stageID = 0;
-		String divide = time;
-		String parts[] = divide.split(" - ");
+		String parts[] = time.split(" - ");
 		String starttime= parts[0];
 		String endtime = parts[1];
 		
@@ -130,6 +129,10 @@ public class CardController extends JFrame implements CardSwitcher {
 	public ArrayList<String> getWorkerList() {
 		ArrayList<String> list = dbManager.getWorkerNameList();
 		return list;
+	}
+	
+	public void updateAvailible() {
+		concertCard.getBookedTime();
 	}
 	
 	public void addBand(String bandname, String orgin, ArrayList<BandMember> list) {	
@@ -188,8 +191,36 @@ public class CardController extends JFrame implements CardSwitcher {
 		return dayID;
 	}
 	
+	public String getDay(int id) {
+		String day = "";
+		switch(id) {
+		
+		case 1: {
+			day = "Thursday" ;
+		}
+		break;
+		case 2 : {
+			day = "Friday";
+		}
+		break;
+		case 3 : {
+			day = "Saturday";
+		}
+		break;
+		}
+		
+		return day;
+	}
+	
 	public void updateLabels(String band, String worker) {
 		concertCard.setBandLabel(band);
 		concertCard.setContactLabel(worker);
+		try {
+			ArrayList<BandSpecificTime> list = dbManager.getBandSpecificTimes(band);
+			if(list.size() > 0) {
+				concertCard.setUpBookedTimes(band, list);
+			}
+			
+		} catch (SQLException e) {}
 	}
 }

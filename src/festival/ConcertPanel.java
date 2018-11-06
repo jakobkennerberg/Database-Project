@@ -32,6 +32,7 @@ public class ConcertPanel extends JPanel implements ActionListener {
 	private JLabel lblTime = new JLabel("Time");
 	private JLabel lblStage = new JLabel("Stage");
 	private JLabel lblDay = new JLabel("Day");
+	private JLabel lblBooked = new JLabel("");
 	private CardController controller;
 	
 	private ImageIcon stageMallorca = new ImageIcon("files/MallorcaScene.jpg");
@@ -71,6 +72,7 @@ public class ConcertPanel extends JPanel implements ActionListener {
 		lblBand.setFont(lblFont);
 		lblContactPerson.setBounds(30, 490, 400, 100);
 		lblContactPerson.setFont(lblFont);
+		lblBooked.setBounds(550, 250, 400, 300);
 		
 		lblDay.setBounds(30, 100, 200, 50);
 		lblDay.setFont(lblFont);
@@ -78,6 +80,7 @@ public class ConcertPanel extends JPanel implements ActionListener {
 		dayBox.addItem("Thursday");
 		dayBox.addItem("Friday");
 		dayBox.addItem("Saturday");
+		dayBox.addActionListener(this);
 			
 		lblStage.setBounds(30, 200, 200, 50); 
 		lblStage.setFont(lblFont);
@@ -102,14 +105,8 @@ public class ConcertPanel extends JPanel implements ActionListener {
 		timeBox.setBounds(25, 335, 200, 50); 
 		
 		setUpTimes();
-		//getBookedTime((String)dayBox.getSelectedItem(), (String)stageBox.getSelectedItem());
 		
-//		timeBox.addItem("13.00 - 15.00");
-//		timeBox.addItem("16.00 - 18.00");
-//		timeBox.addItem("19.00 - 21.00");
-//		timeBox.addItem("22.00 - 24.00");
-//		timeBox.addItem("01.00 - 03.00");
-		
+		panel.add(lblBooked);
 		panel.add(lblDay);
 		panel.add(lblStage);
 		panel.add(lblTime);
@@ -145,7 +142,7 @@ public class ConcertPanel extends JPanel implements ActionListener {
 		for(int i = 0; i < times.size(); i++) {
 			String currentTime = times.get(i);
 			for(int j = 0; j < bookedTimes.size(); j++) {
-				if(currentTime.equals(bookedTimes.get(j))) {
+				if(currentTime.equals((String)bookedTimes.get(j))) {
 					eraseTime = true;
 					break;
 				}
@@ -163,16 +160,17 @@ public class ConcertPanel extends JPanel implements ActionListener {
 	}
 	
 	public void setUpTimes() {
-		times.add("13.00 - 15.00");
-		times.add("16.00 - 18.00");
-		times.add("19.00 - 21.00");
-		times.add("22.00 - 24.00");
-		times.add("01.00 - 03.00");
+		times.add("13:00 - 15:00");
+		times.add("16:00 - 18:00");
+		times.add("19:00 - 21:00");
+		times.add("22:00 - 24:00");
+		times.add("01:00 - 03:00");
 	}
 
 	public void actionPerformed(ActionEvent e) {
 		if(e.getSource()==btnBack) {
 			controller.setAlreadyAssigned();
+			lblBooked.setText("");
 			cardSwitcher.goBack();
 		}
 		if(e.getSource()==btnPublish) {
@@ -189,12 +187,12 @@ public class ConcertPanel extends JPanel implements ActionListener {
 			timer.start();
 		}
 		if(e.getSource()==stageBox) {
-			getBookedTime((String)dayBox.getSelectedItem(), (String)stageBox.getSelectedItem());
+			getBookedTime();
 			String stage = (String)stageBox.getSelectedItem();
 			stageSelector(stage);
 		}
 		if(e.getSource()==dayBox) {
-			getBookedTime((String)dayBox.getSelectedItem(), (String)stageBox.getSelectedItem());
+			getBookedTime();
 		}
 		
 	}
@@ -210,6 +208,14 @@ public class ConcertPanel extends JPanel implements ActionListener {
 		Image scaledImage = transImage.getScaledInstance(625, 335, Image.SCALE_SMOOTH);		
 		image = new ImageIcon(scaledImage);
 		return image;
+	}
+	
+	public void setUpBookedTimes(String bandname, ArrayList<BandSpecificTime> list) {
+		String booked = "<html>"+bandname + " already have the following times scheduled:<br><html>";
+		for(BandSpecificTime time : list) {
+			booked += "<html>" + controller.getDay(time.getDayID()) + ",  " + time.getStarttime()+ " - " + time.getEndtime() + "<br><html>";
+		}
+		lblBooked.setText(booked);
 	}
 	
 	public void stageSelector(String stageName) {
@@ -234,7 +240,9 @@ public class ConcertPanel extends JPanel implements ActionListener {
 		}
 	}
 	
-	public void getBookedTime(String day, String scene) {
+	public void getBookedTime() {
+		String day = (String)dayBox.getSelectedItem();
+		String scene = (String)stageBox.getSelectedItem();
 		controller.getBookedTimes(day, scene);
 	}
 	

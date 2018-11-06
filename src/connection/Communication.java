@@ -14,6 +14,7 @@ import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 
 import festival.BandMember;
+import festival.BandSpecificTime;
 
 public class Communication {
 	private final String url = "jdbc:postgresql://pgserver.mah.se/jmy";
@@ -114,7 +115,7 @@ public class Communication {
 	}
 	
 	public ArrayList<String> getBookedTimes(int day, int stage) throws SQLException {
-		String bookedQuery = "Select ";
+		String bookedQuery = "select starttime, endtime from concertSchedule where sceneid="+stage+" AND day="+day+" order by starttime ASC, endtime ASC";
 		ArrayList<String> bookedTimes = new ArrayList<String>();
 		
 		PreparedStatement pst = conn.prepareStatement(bookedQuery);
@@ -131,14 +132,23 @@ public class Communication {
 	}
 	
 	public void insertConcert(int bandid, int dayid, int stageid, String starttime, String endtime) throws SQLException {
-		String insertConcert = "";
+		String insertConcert = "insert into ConcertSchedule(sceneid, bandid, day, starttime, endtime) values ("+stageid+", "+bandid+", "+dayid+", '"+starttime+"', '"+endtime+"')"; 
 		
 		PreparedStatement pst = conn.prepareStatement(insertConcert);
 		pst.executeUpdate();
 	}
 	
-	public void getBandSpecificTimes(String bandname) throws SQLException  {
+	public ArrayList<BandSpecificTime> getBandSpecificTimes(String bandname) throws SQLException  {
+		String bandTimesQuery = "select cs.day, cs.starttime, cs.endtime from ConcertSchedule AS cs join band on cs.bandID=band.bandid where bandname='"+bandname+"'";
+		ArrayList<BandSpecificTime> list = new ArrayList<BandSpecificTime>();
 		
+		PreparedStatement pst = conn.prepareStatement(bandTimesQuery);
+		ResultSet rs = pst.executeQuery();
+		
+		while(rs.next()) {
+			list.add(new BandSpecificTime(rs.getInt("day"), rs.getString("starttime"), rs.getString("endtime")));		
+		}
+		return list;
 	}
 	
 	/**
