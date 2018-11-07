@@ -273,8 +273,7 @@ public class VisitorScreen extends JPanel implements ActionListener {
 
 			} catch (Exception e1) {}
 		}
-	}
-		
+	}	
 //	public static void main(String[] args) {
 //		VisitorScreen screen = new VisitorScreen();
 //	}
