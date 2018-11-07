@@ -1,5 +1,6 @@
 package festival;
 
+import java.awt.BorderLayout;
 import java.awt.Color;
 
 import java.awt.Dimension;
@@ -37,18 +38,23 @@ public class VisitorScreen extends JPanel implements ActionListener {
 	private String currentChosenBand;
 	private ArrayList<SchedulePanel> scheduleList = new ArrayList<SchedulePanel>();
 	
-	private int scheduleSize = 5;
+	private int customSize;
+	private boolean custom = false;
+	private int startShowingIndex;
+	private int endShowingIndex;
+	private int scheduleSize = 0;
 	private String bandInfoShowing = "";
 	
 	public VisitorScreen(VisitorController controller) {
 		setPreferredSize(new Dimension(1000, 700));
 		setLayout(null);
 		this.controller = controller;
+		scheduleList = controller.getSchedule(scheduleList);
+		scheduleSize = scheduleList.size();
 		add(leftPanel());
 		add(rightPanel());
-		scheduleList = controller.getSchedule(scheduleList);
-		updateSchedule(scheduleList);
-		//scheduleSize = scheduleList.size();
+		initiateSchedule(scheduleList);
+		setUpSchedule(startShowingIndex, endShowingIndex);
 		
 		btnView.addActionListener(this);
 		btnUp.addActionListener(this);
@@ -68,25 +74,23 @@ public class VisitorScreen extends JPanel implements ActionListener {
 		
 		schedulePanel.setBounds(175, 90, 325, 500);
 		schedulePanel.setBackground(Color.WHITE);
-		schedulePanel.setLayout(new GridLayout(scheduleSize,1));
+		schedulePanel.setLayout(new GridLayout(5,1));
 		
-//		JScrollPane scroll = new JScrollPane(schedulePanel);
-//		scroll.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_ALWAYS);
-//		JViewport vp = scroll.getViewport();
+//		JScrollPane scrollp = new JScrollPane(JScrollPane.VERTICAL_SCROLLBAR_ALWAYS, JScrollPane.HORIZONTAL_SCROLLBAR_AS_NEEDED);
+//		scrollp.getViewport().add(schedulePanel);
+//		JViewport vp = scrollp.getViewport();
 //		vp.add(schedulePanel);
 //		vp.setBounds(175, 90, 325, 500);
-//		scroll.setBounds(175, 90, 325, 500);
+//		scrollp.setBounds(175, 90, 325, 500);
+//		scrollp.setPreferredSize(new Dimension(325, 500));
 		
-//		updateSchedule("hahhahahhhaahhahhahah");
 		btnUp.setBounds(175, 25, 325, 50);
-		btnUp.setEnabled(false);
 		btnDown.setBounds(175, 600, 325, 50);
 		
 		panel.add(btnUp);
 		panel.add(btnDown);
 		panel.add(schedulePanel);
 		panel.add(lblschedule);
-		panel.add(btnView);
 		return panel;
 	}
 	
@@ -98,7 +102,12 @@ public class VisitorScreen extends JPanel implements ActionListener {
 		lblinfo.setBounds(100, 30, 300, 75);
 		lblinfo.setFont(new Font("SansSerif", Font.BOLD, 25));
 		lblinfo.setHorizontalAlignment(JLabel.CENTER);
-		informationArea.setBounds(100, 90, 300, 500);
+		
+		JScrollPane scroll = new JScrollPane(informationArea);
+		scroll.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_ALWAYS);
+		scroll.setHorizontalScrollBarPolicy(JScrollPane.HORIZONTAL_SCROLLBAR_AS_NEEDED);
+		scroll.setBounds(100, 90, 300, 500);
+		//informationArea.setBounds(100, 90, 300, 500);
 		informationArea.setEnabled(false);
 		
 		btnView.setBounds(100, 600, 300, 50);
@@ -106,12 +115,22 @@ public class VisitorScreen extends JPanel implements ActionListener {
 		btnView.setFont(new Font("SansSerif", Font.BOLD, 20));
 		
 		panel.add(btnView);
-		panel.add(informationArea);
+		panel.add(scroll);
+		//panel.add(informationArea);
 		panel.add(lblinfo);
 		return panel;
 	}
 	
-	public void updateSchedule(ArrayList<SchedulePanel> list) {
+	public void initiateSchedule(ArrayList<SchedulePanel> list) {
+		if(scheduleSize <= 5) {
+			endShowingIndex = scheduleSize;
+			btnDown.setEnabled(false);
+		} else {
+			endShowingIndex = 5;
+		}
+		startShowingIndex = 0;
+		btnUp.setEnabled(false);
+		
 		for(SchedulePanel panel : list) {
 			JRadioButton btn = new JRadioButton();
 			btn.addActionListener(rbgroup);
@@ -119,25 +138,52 @@ public class VisitorScreen extends JPanel implements ActionListener {
 			btn.setForeground(Color.WHITE);
 			bg.add(btn);
 			panel.addRadioButton(btn);
-			//panel.setSize(325, 65);
-			schedulePanel.add(panel);
 		}
-//		for(int i = 0; i < scheduleSize; i++) {
-//			JRadioButton btn = new JRadioButton();
-//			btn.addActionListener(rbgroup);
-//			btn.setText(bandname);
-//			btn.setForeground(Color.WHITE);
-//			bg.add(btn);
-//			SchedulePanel panel = new SchedulePanel(btn);
-//			//panel.setSize(325, 65);
-//			schedulePanel.add(panel);
-//		}
 	}
 	
-	public int getScheduleSize() {
-//		int = conn.getScheduleSize();
-		return scheduleSize;
+	public void goUp() {
+		startShowingIndex = startShowingIndex - 5;
+		if(custom == true) {
+			endShowingIndex = endShowingIndex - customSize;
+		}
+		else if((endShowingIndex - 5) == 5) {
+			endShowingIndex = 5;
+			btnUp.setEnabled(false);
+		} else {
+			endShowingIndex = endShowingIndex - 5;
+		}
+		btnDown.setEnabled(true);
 	}
+	
+	public void goDown() {
+		startShowingIndex = startShowingIndex + 5;
+		if((endShowingIndex + 5) > scheduleSize) {
+			customSize = scheduleSize - endShowingIndex;
+			custom = true;
+			endShowingIndex = scheduleSize;
+			btnDown.setEnabled(false);
+		} else if((endShowingIndex + 5) == 5){
+			endShowingIndex = endShowingIndex + 5;
+			btnDown.setEnabled(false);
+			custom = false;
+		} else {
+			endShowingIndex = endShowingIndex + 5;
+			custom = false;
+		}
+		btnUp.setEnabled(true);
+	}
+	
+	public void setUpSchedule(int start, int end) {
+		schedulePanel.removeAll();
+		schedulePanel.repaint();
+		for(int i = start; i < end; i++ ) {
+			SchedulePanel panel = scheduleList.get(i);
+			panel.setSize(325, 65);
+			schedulePanel.add(panel);	
+		}
+		schedulePanel.revalidate();
+	}
+	
 	
 	public void addBandInfo(ArrayList<String> infoList) {
 		bandInfoShowing += "Bandname: " + infoList.get(0) + "\nOrigin: " + infoList.get(1) + "\nMembers:\n\n";
@@ -170,10 +216,13 @@ public class VisitorScreen extends JPanel implements ActionListener {
 			controller.getBandMemberInfo(currentChosenBand);
 		}
 		if(e.getSource()==btnUp) {
+			goUp();
+			setUpSchedule(startShowingIndex, endShowingIndex);
 			
 		}
 		if(e.getSource()==btnDown) {
-			
+			goDown();
+			setUpSchedule(startShowingIndex, endShowingIndex);
 		}
 	}
 	

@@ -32,7 +32,7 @@ public class SchedulePanel extends JPanel {
 		lblweekday = new JLabel(weekday);
 		
 		setLayout(null);
-		setSize(new Dimension(325, 65));
+		setPreferredSize(new Dimension(325, 65));
 		setBackground(Color.WHITE);
 		setBorder(BorderFactory.createLineBorder(Color.BLACK));
 		lblweekday.setBounds(30, 10, 200, 21);
