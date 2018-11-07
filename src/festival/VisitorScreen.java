@@ -165,6 +165,7 @@ public class VisitorScreen extends JPanel implements ActionListener {
 	public void actionPerformed(ActionEvent e) {
 		if(e.getSource()==btnView) {
 			informationArea.setText("");
+			bandInfoShowing = "";
 			controller.getBandInfo(currentChosenBand);
 			controller.getBandMemberInfo(currentChosenBand);
 		}
