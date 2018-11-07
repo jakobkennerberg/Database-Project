@@ -15,7 +15,11 @@ import javax.swing.JPanel;
 import javax.swing.SwingUtilities;
 
 import connection.Communication;
-
+/**
+ * Class which is used to start the application, and gives the user a option to choose to log in as a worker or a visitor
+ * @author JakobK98
+ *
+ */
 public class AppStarter extends JPanel implements ActionListener {
 	private JLabel title = new JLabel("Welcome");
 	private JLabel lbldescribe = new JLabel("Made for demostrative purposes only");
@@ -28,6 +32,9 @@ public class AppStarter extends JPanel implements ActionListener {
 	private ImageIcon visitorpic = new ImageIcon("files/tourist.png");
 	private Communication dbManager;
 	
+	/**
+	 * Constructor
+	 */
 	public AppStarter() {
 		dbManager = new Communication();
 		setLayout(null);
@@ -39,6 +46,10 @@ public class AppStarter extends JPanel implements ActionListener {
 		showStartMenu();
 	}
 	
+	/**
+	 * Method used to create the middle section of the GUI
+	 * @return
+	 */
 	public JPanel menuPanel() {
 		JPanel mpanel = new JPanel(null);
 		mpanel.setBounds(0, 100, 700, 300);
@@ -65,6 +76,10 @@ public class AppStarter extends JPanel implements ActionListener {
 		return mpanel;
 	}
 	
+	/**
+	 * Method used to create the upper section of the GUI
+	 * @return
+	 */
 	public JPanel titlePanel() {
 		JPanel tpanel = new JPanel(null);
 		tpanel.setBounds(0, 0, 700, 100);
@@ -76,6 +91,10 @@ public class AppStarter extends JPanel implements ActionListener {
 		return tpanel;
 	}
 	
+	/**
+	 * Method used to create the lower section of the GUI
+	 * @return
+	 */
 	public JPanel bottomPanel() {
 		JPanel bpanel = new JPanel(null);
 		bpanel.setBounds(0, 400, 700, 100);
@@ -86,6 +105,9 @@ public class AppStarter extends JPanel implements ActionListener {
 		return bpanel;
 	}
 	
+	/**
+	 * Method which listens to the buttons in the GUI
+	 */
 	public void actionPerformed(ActionEvent e) {
 		if(e.getSource()==workerBtn) {
 			frame.dispose();
@@ -97,6 +119,11 @@ public class AppStarter extends JPanel implements ActionListener {
 		}
 	}
 	
+	/**
+	 * Method used to scale the pictures 
+	 * @param image
+	 * @return
+	 */
 	public ImageIcon scalePicture(ImageIcon image) {
 		Image transImage = image.getImage();
 		Image scaledImage = transImage.getScaledInstance(140, 190, Image.SCALE_SMOOTH);		
@@ -104,6 +131,9 @@ public class AppStarter extends JPanel implements ActionListener {
 		return image;
 	}
 	
+	/**
+	 * Method used to show the frame
+	 */
 	public void showStartMenu() {
 		frame = new JFrame("Starting menu");
 		frame.setPreferredSize(new Dimension(700, 500));
@@ -114,6 +144,10 @@ public class AppStarter extends JPanel implements ActionListener {
 		frame.setLocationRelativeTo(null);
 	}
 	
+	/**
+	 * The main method, used to start the application
+	 * @param args
+	 */
 	public static void main(String args[]) {
 		SwingUtilities.invokeLater(new Runnable() {
 			public void run() {

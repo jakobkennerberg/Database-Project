@@ -1,11 +1,11 @@
 package festival;
 
 import java.awt.Color;
+
 import java.awt.Dimension;
 import java.awt.Font;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.util.ArrayList;
 
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
@@ -17,6 +17,11 @@ import javax.swing.JTextField;
 import javax.swing.event.DocumentEvent;
 import javax.swing.event.DocumentListener;
 
+/**
+ * Class which represents the GUI to add members to a band
+ * @author JakobK98
+ *
+ */
 public class MemberAdderPanel extends JPanel implements ActionListener, DocumentListener {
 	private BandAdderPanel bandAdder;
 	private JFrame frame;
@@ -35,6 +40,10 @@ public class MemberAdderPanel extends JPanel implements ActionListener, Document
 	private boolean correctOrgin = false;
 	private final JComboBox<String> instrumentBox = new JComboBox<String>();
 	
+	/**
+	 * Constructor
+	 * @param panel
+	 */
 	public MemberAdderPanel(BandAdderPanel panel) {
 		bandAdder = panel;
 		setLayout(null);
@@ -44,6 +53,10 @@ public class MemberAdderPanel extends JPanel implements ActionListener, Document
 		showStartMenu();
 	}
 	
+	/**
+	 * Method used to create the GUI
+	 * @return
+	 */
 	public JPanel infoPanel() {
 		JPanel apanel = new JPanel();
 		apanel.setLayout(null);
@@ -102,6 +115,9 @@ public class MemberAdderPanel extends JPanel implements ActionListener, Document
 		return apanel;
 	}
 	
+	/**
+	 * Method used to show the frame
+	 */
 	public void showStartMenu() {
 		frame = new JFrame("Add Band Member");
 		frame.setPreferredSize(new Dimension(700, 500));
@@ -110,6 +126,9 @@ public class MemberAdderPanel extends JPanel implements ActionListener, Document
 		frame.setVisible(true);
 	}
 	
+	/**
+	 * Method which checks if a member is ok to add
+	 */
 	public void checkMember() {
 		if(!tfName.getText().trim().isEmpty()) {
 			correctName = true;
@@ -128,6 +147,9 @@ public class MemberAdderPanel extends JPanel implements ActionListener, Document
 		}
 	}
 	
+	/**
+	 * The following methods listens to text being inserted into the textfields
+	 */
 	public void insertUpdate(DocumentEvent e) {
 		checkMember();
 	}
@@ -142,6 +164,9 @@ public class MemberAdderPanel extends JPanel implements ActionListener, Document
 		checkMember();
 	}
 
+	/**
+	 * Method which listens to the buttons of the GUI
+	 */
 	public void actionPerformed(ActionEvent e) {
 		if(e.getSource()==btnAddMember) {
 			String instrument = (String)instrumentBox.getSelectedItem();

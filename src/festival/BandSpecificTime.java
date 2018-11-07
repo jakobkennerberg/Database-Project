@@ -1,5 +1,10 @@
 package festival;
 
+/**
+ * Method used to store information about the booked times of a band
+ * @author JakobK98
+ *
+ */
 public class BandSpecificTime {
 	private int dayID;
 	private String starttime;

@@ -10,14 +10,23 @@ import javax.swing.JPanel;
 
 import connection.Communication;
 
+/**
+ * This class is the controller of the worker side
+ * @author JakobK98
+ *
+ */
 public class CardController extends JFrame implements CardSwitcher {
 	CardLayout cardLayout = new CardLayout();
 	private JPanel cards = new JPanel(cardLayout);
 	private String currentCard;
-	private ConcertPanel concertCard; // = new ConcertPanel(this);
-	private WorkerScreen workerCard; // = new WorkerScreen(this);
+	private ConcertPanel concertCard;
+	private WorkerScreen workerCard; 
 	private Communication dbManager;
 	
+	/**
+	 * Constructor
+	 * @param comm
+	 */
 	public CardController(Communication comm) {
 		dbManager = comm;
 		setUpCards();
@@ -31,8 +40,10 @@ public class CardController extends JFrame implements CardSwitcher {
 		this.pack();
 	}
 	
+	/**
+	 * Method used to set up the panels of the Worker side
+	 */
 	public void setUpCards() {
-		
 		workerCard = new WorkerScreen(this);
 		workerCard.setListener(this);
 		JPanel cardWorker = new JPanel();
@@ -45,9 +56,11 @@ public class CardController extends JFrame implements CardSwitcher {
 		
 		cards.add(cardWorker, "workerScreen");
 		cards.add(cardConcert, "concertScreen");
-		
 	}
 	
+	/**
+	 * Method used to switch to the next panel
+	 */
 	public void nextPanel() {
 		if(currentCard.equals("workerScreen")) {
 			currentCard = "concertScreen";
@@ -55,6 +68,9 @@ public class CardController extends JFrame implements CardSwitcher {
 		cardLayout.show(cards, currentCard);
 	}
 	
+	/**
+	 * Method used to switch to the previous panel
+	 */
 	public void goBack() {
 		if(currentCard.equals("concertScreen")) {
 			currentCard = "workerScreen";
@@ -62,6 +78,11 @@ public class CardController extends JFrame implements CardSwitcher {
 		cardLayout.show(cards, currentCard);
 	}
 	
+	/**
+	 * Method used to get the list of booked times of a specific day and stage from the communcation class, and gives it to the GUI
+	 * @param day
+	 * @param stage
+	 */
 	public void getBookedTimes(String day, String stage) {
 		int stageID = 0;
 		int dayID = 0;
@@ -74,6 +95,13 @@ public class CardController extends JFrame implements CardSwitcher {
 		}catch (SQLException e) {}
 	}
 	
+	/**
+	 * Method used to get the correct values for a insert of a concert, and passes it on to the communication class
+	 * @param band
+	 * @param day
+	 * @param stage
+	 * @param time
+	 */
 	public void specifyConcert(String band, String day, String stage, String time) {
 		int bandID = 0;
 		int dayID = 0;
@@ -88,16 +116,24 @@ public class CardController extends JFrame implements CardSwitcher {
 		try {
 			bandID = dbManager.getBandID(band);
 			dbManager.insertConcert(bandID, dayID, stageID, starttime, endtime);
-		} catch (SQLException e) {
-		}
+		} catch (SQLException e) {}
 	}
 	
+	/**
+	 * Method which acts as a middle hand when assignig a contact person to a band
+	 * @param band
+	 * @param contact
+	 */
 	public void assignContact(String band, String contact) {
 		try {
 			dbManager.insertContact(band, contact);
 		} catch (SQLException e) {}
 	}
 	
+	/**
+	 * Method which handles the logic to control if a band already have a contactperson
+	 * @param bandname
+	 */
 	public void checkContact(String bandname) {
 		try {
 			boolean assigned = dbManager.checkContact(bandname);
@@ -107,34 +143,59 @@ public class CardController extends JFrame implements CardSwitcher {
 				workerCard.setAssigned("-", false);
 				workerCard.setUpWorkerList(dbManager.getWorkerNameList(), true);
 			}
-		} catch (SQLException e) {
-		}
+		} catch (SQLException e) {}
 	}
 	
+	/**
+	 * Method used to update the GUI when the band already is assigned to a contactperson
+	 */
 	public void setAlreadyAssigned() {
 		workerCard.setAssigned(dbManager.getContactName(), true);
 		workerCard.setUpWorkerList(dbManager.getWorkerNameList(), false);
 	}
 	
+	/**
+	 * Method used to get the amount of either workers or bands from the communication class
+	 * @param str
+	 * @return
+	 */
 	public int getGridSize(String str) {
 		int gridSize = dbManager.getCount(str);
 		return gridSize;
 	}
 	
+	/**
+	 * Method used to get all the names of the bands from the communication class
+	 * @param list
+	 * @return
+	 */
 	public ArrayList<String> getBandList(ArrayList<String> list ) {
 		list = dbManager.getBandNameList();
 		return list;
 	}
 	
+	/**
+	 * Method used to get all the names of the workers from the communication class
+	 * @return
+	 */
 	public ArrayList<String> getWorkerList() {
 		ArrayList<String> list = dbManager.getWorkerNameList();
 		return list;
 	}
 	
+	/**
+	 * Method used to call a method in the GUI to update the availible times to book
+	 */
 	public void updateAvailible() {
 		concertCard.getBookedTime();
 	}
 	
+	/**
+	 * Method which handles the logic when a band shall be inserted into the database 
+	 * @param bandname
+	 * @param orgin
+	 * @param list
+	 */
 	public void addBand(String bandname, String orgin, ArrayList<BandMember> list) {	
 		try {
 			dbManager.insertBand(bandname, orgin, list);
@@ -146,6 +207,11 @@ public class CardController extends JFrame implements CardSwitcher {
 		}
 	}
 	
+	/**
+	 * Method used to get the ID of a stage
+	 * @param stage
+	 * @return
+	 */
 	public int getStageID(String stage) {
 		int stageID = 0;
 		switch(stage) {
@@ -170,6 +236,11 @@ public class CardController extends JFrame implements CardSwitcher {
 		return stageID;
 	}
 	
+	/**
+	 * Method used to get the ID of the day selected
+	 * @param day
+	 * @return
+	 */
 	public int getDayID(String day) {
 		int dayID = 0;
 		switch(day) {
@@ -191,6 +262,11 @@ public class CardController extends JFrame implements CardSwitcher {
 		return dayID;
 	}
 	
+	/**
+	 * Method used to get the name of the day based on the ID
+	 * @param id
+	 * @return
+	 */
 	public String getDay(int id) {
 		String day = "";
 		switch(id) {
@@ -212,6 +288,11 @@ public class CardController extends JFrame implements CardSwitcher {
 		return day;
 	}
 	
+	/**
+	 * Method which update the concert-booking GUI with text, based on the choices made in the previous GUI panel
+	 * @param band
+	 * @param worker
+	 */
 	public void updateLabels(String band, String worker) {
 		concertCard.setBandLabel(band);
 		concertCard.setContactLabel(worker);

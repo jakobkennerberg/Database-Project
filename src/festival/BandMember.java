@@ -1,11 +1,15 @@
 package festival;
 
+/**
+ * This class is used to store the information of the bandmembers
+ * @author JakobK98
+ *
+ */
 public class BandMember {
 	private String name;
 	private String country;
 	private String instrument;
 	private String xtraInfo;
-	private String band;
 	
 	public BandMember(String name, String country, String instrument) {
 		this.name = name;
@@ -52,12 +56,4 @@ public class BandMember {
 		this.xtraInfo = xtraInfo;
 	}
 	
-//	public void setBand(String band) {
-//		this.band = band;
-//	}
-//	
-//	public String getBand() {
-//		return band;
-//	}
-
 }

@@ -15,6 +15,11 @@ import javax.swing.JPanel;
 import javax.swing.JRadioButton;
 import javax.swing.JScrollPane;
 
+/**
+ * This class represents the start panel of the Worker GUI, used to assign contact persons among things
+ * @author JakobK98
+ *
+ */
 public class WorkerScreen extends JPanel implements ActionListener {
 	private CardSwitcher cardSwitcher;
 	private JPanel bandPanel;
@@ -39,6 +44,10 @@ public class WorkerScreen extends JPanel implements ActionListener {
 	private boolean assigned = false;
 	private CardController controller;
 	
+	/**
+	 * Constructor
+	 * @param controller
+	 */
 	public WorkerScreen(CardController controller) {
 		setPreferredSize(new Dimension(1000, 700));
 		setLayout(null);
@@ -47,6 +56,10 @@ public class WorkerScreen extends JPanel implements ActionListener {
 		add(bandPanel());
 	}
 	
+	/**
+	 * Method used to create the GUI
+	 * @return
+	 */
 	public JPanel bandPanel() {
 		bandPanel = new JPanel();
 		bandPanel.setLayout(null);
@@ -95,17 +108,28 @@ public class WorkerScreen extends JPanel implements ActionListener {
 		return bandPanel;
 	}
 	
-	
+	/**
+	 * Method used to set the listener to this class
+	 * @param listener
+	 */
 	public void setListener(CardSwitcher listener) {
 		cardSwitcher = listener;
 	}
 	
+	/**
+	 * Method used to get the list of bandnames to display
+	 * @return
+	 */
 	public ArrayList<String> getBandList() {
 		ArrayList<String> list = new ArrayList<String>();
 		list = controller.getBandList(list);
 		return list;
 	}
 	
+	/**
+	 * Method used to set up the section displaying the bands
+	 * @param bandList
+	 */
 	public void setUpBandList(ArrayList<String> bandList) {
 		bandListPanel.removeAll();
 		bandListPanel.setLayout(new GridLayout(getBandListCount(), 1));
@@ -120,6 +144,11 @@ public class WorkerScreen extends JPanel implements ActionListener {
 		}
 	}
 	
+	/**
+	 * Method used to set up the section displaying the workers
+	 * @param workerList
+	 * @param value
+	 */
 	public void setUpWorkerList(ArrayList<String> workerList, boolean value) {
 		workerListPanel.removeAll();
 		workerListPanel.setLayout(new GridLayout(getWorkerListCount(), 1));
@@ -135,26 +164,48 @@ public class WorkerScreen extends JPanel implements ActionListener {
 		}
 	}
 	
+	/**
+	 * Method used to get the amount of bands in the database
+	 * @return
+	 */
 	public int getBandListCount() {
 		bandAmount = controller.getGridSize("Band");
 		return bandAmount;
 	}
 	
+	/**
+	 * Method used to get the amount of workers in the database
+	 * @return
+	 */
 	public int getWorkerListCount() {
 		workerAmount = controller.getGridSize("Worker");
 		return workerAmount;
 	}
 	
+	/**
+	 * Method used to submit the band created
+	 * @param bandname
+	 * @param orgin
+	 * @param members
+	 */
 	public void submitBand(String bandname, String orgin, ArrayList<BandMember> members) {
 		controller.addBand(bandname, orgin, members);
 	}
 	
+	/**
+	 * Method used to check if the user should be able to go to the next panel(to book a concert)
+	 */
 	public void checkIfGoodToGo() {
 		if(selectedWorker == true && selectedBand == true) {
 			btnAssign.setEnabled(true);
 		}
 	}
 	
+	/**
+	 * Method which is used to display the status of the band regarding being assigned a contact person
+	 * @param name
+	 * @param value
+	 */
 	public void setAssigned(String name, boolean value) {
 		lblAssigned.setText("Assigned: " + name);
 		btnAssign.setEnabled(value);
@@ -169,12 +220,15 @@ public class WorkerScreen extends JPanel implements ActionListener {
 		}
 	}
 
+	/**
+	 * Method which listens to the buttons in the GUI
+	 */
 	public void actionPerformed(ActionEvent e) {
 		if(e.getSource()==btnAddBand) {
 			new BandAdderPanel(this);
 		}
 		if(e.getSource()==btnAssign) {
-			if(assigned == false) {
+			if(assigned == false) { //if the band not already has been assigned a worker, the selected worker will be assigned
 				controller.assignContact(currentSelectedBand, currentSelectedWorker);
 			}
 			controller.updateLabels(currentSelectedBand, currentSelectedWorker);
@@ -183,6 +237,11 @@ public class WorkerScreen extends JPanel implements ActionListener {
 		}
 	}
 	
+	/**
+	 * Inner class which is used to listen to the buttons of the workers
+	 * @author JakobK98
+	 *
+	 */
 	private class WorkerRBListener implements ActionListener {
 		public void actionPerformed(ActionEvent e) {
 			try {
@@ -194,6 +253,11 @@ public class WorkerScreen extends JPanel implements ActionListener {
 		}
 	}
 	
+	/**
+	 * Inner class which is used to listen to the buttons of the bands
+	 * @author JakobK98
+	 *
+	 */
 	private class BandRBListener implements ActionListener {
 		public void actionPerformed(ActionEvent e) {
 			JRadioButton rb = (JRadioButton)e.getSource();

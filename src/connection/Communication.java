@@ -1,6 +1,5 @@
 package connection;
 
-import java.io.IOException;
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.PreparedStatement;
@@ -15,9 +14,13 @@ import javax.swing.JPanel;
 
 import festival.BandMember;
 import festival.BandSpecificTime;
-import festival.ConcertPanel;
 import festival.SchedulePanel;
 
+/**
+ * Class used to communicate with the database
+ * @author JakobK98
+ *
+ */
 public class Communication {
 	private final String url = "jdbc:postgresql://pgserver.mah.se/jmy";
 	private final String userID = "ah8378";
@@ -42,6 +45,7 @@ public class Communication {
 		}	
 	}
 	
+	
 	/**
 	 * Method used to connect to the database
 	 * @return
@@ -57,6 +61,7 @@ public class Communication {
 		}
  		return conn;
 	}
+	
 	
 	/**
 	 * Initiate the values for the IDs so the can stay unique
@@ -84,32 +89,14 @@ public class Communication {
 		System.out.println("BandID: " + bandID);
 		System.out.println("MemberID: " + memberID);
 	}	
-	
+
 	
 	/**
-	 * All info of workers
-	 * @return ArrayList of workers (all info)
+	 * Method used to get the entire booked schedule from the database
+	 * @param schedule
+	 * @return a list, containing booked day, start and end time of the concert, scene name and which band is playing
+	 * @throws SQLException
 	 */
-	public ArrayList<String> getWorkers()throws SQLException { //DO we need????
-		String query = "Select * From Worker";
-		ArrayList<String> workers = new ArrayList<String>();
-		
-		//try(Connection conn = connect()) {
-		try {
-			Statement st = conn.createStatement();
-			ResultSet rs = st.executeQuery(query);
-				
-			while (rs.next()) {
-				workers.add(rs.getInt("workerid" ) + ", " + 
-					rs.getString("name") + ", " + 
-					rs.getInt("personnumber") + ", " + 
-					rs.getString("address"));
-			}
-		}catch (SQLException e) {}
-			
-		return workers;
-	}
-	
 	public ArrayList<SchedulePanel> getSchedule(ArrayList<SchedulePanel> schedule) throws SQLException {
 		String scheduleQuery = "Select scene.scenename, band.bandname, cs.day, cs.starttime, cs.endtime from ConcertSchedule AS cs join band on band.bandid = cs.bandid join scene on scene.scenenumber=cs.sceneid order by cs.day ASC, cs.starttime ASC";
 		PreparedStatement pst = conn.prepareStatement(scheduleQuery);
@@ -122,6 +109,14 @@ public class Communication {
 		return schedule;
 	}
 	
+	
+	/**
+	 * Method used to get the booked times of a certain day and stage
+	 * @param day
+	 * @param stage
+	 * @return
+	 * @throws SQLException
+	 */
 	public ArrayList<String> getBookedTimes(int day, int stage) throws SQLException {
 		String bookedQuery = "select starttime, endtime from concertSchedule where sceneid="+stage+" AND day="+day+" order by starttime ASC, endtime ASC";
 		ArrayList<String> bookedTimes = new ArrayList<String>();
@@ -130,15 +125,23 @@ public class Communication {
 		ResultSet rs = pst.executeQuery();
 		
 		while(rs.next()) {
-			String bookedConcert = rs.getString("starttime") + " - " + rs.getString("endtime"); //lägg ihop start o endtime till ex 15.00 - 17.00
+			String bookedConcert = rs.getString("starttime") + " - " + rs.getString("endtime"); 
 			bookedTimes.add(bookedConcert);
 		}
 		
-		return bookedTimes;
-		
-		
+		return bookedTimes;	
 	}
 	
+	
+	/**
+	 * Method used to insert a booked concert into the database
+	 * @param bandid
+	 * @param dayid
+	 * @param stageid
+	 * @param starttime
+	 * @param endtime
+	 * @throws SQLException
+	 */
 	public void insertConcert(int bandid, int dayid, int stageid, String starttime, String endtime) throws SQLException {
 		String insertConcert = "insert into ConcertSchedule(sceneid, bandid, day, starttime, endtime) values ("+stageid+", "+bandid+", "+dayid+", '"+starttime+"', '"+endtime+"')"; 
 		
@@ -147,6 +150,12 @@ public class Communication {
 	}
 	
 	
+	/**
+	 * Method used to get the days and times in which a specific band has been booked 
+	 * @param bandname
+	 * @return
+	 * @throws SQLException
+	 */
 	public ArrayList<BandSpecificTime> getBandSpecificTimes(String bandname) throws SQLException  {
 		String bandTimesQuery = "select cs.day, cs.starttime, cs.endtime from ConcertSchedule AS cs join band on cs.bandID=band.bandid where bandname='"+bandname+"'";
 		ArrayList<BandSpecificTime> list = new ArrayList<BandSpecificTime>();
@@ -160,8 +169,9 @@ public class Communication {
 		return list;
 	}
 	
+	
 	/**
-	 * Inserts the created band into the db
+	 * Inserts the created band into the database
 	 * @param bandname
 	 * @param origin
 	 * @param members
@@ -177,7 +187,7 @@ public class Communication {
 	
 	
 	/**
-	 * Inserts the members in the created band into the db
+	 * Inserts the members in the created band into the database
 	 * @param name
 	 * @param origin
 	 * @param instrument
@@ -196,8 +206,9 @@ public class Communication {
 		memberID++;	
 	}
 	
+	
 	/**
-	 * Method used only when the musican already exists in the database(inserts only in memberof)
+	 * Method used only when the musician already exists in the database(inserts only in memberOf)
 	 * @param sameID
 	 * @throws SQLException
 	 */
@@ -206,6 +217,7 @@ public class Communication {
 		PreparedStatement pst2 = conn.prepareStatement(insertMO);
 		pst2.executeUpdate();
 	}
+	
 	
 	/**
 	 * Method used to control if the current artist already exists in the database
@@ -239,6 +251,7 @@ public class Communication {
 		}
 	}
 	
+	
 	/**
 	 * Method used to provide the user with the opportunity to choose if it is the same artist or a different with the same name
 	 * @param name
@@ -259,6 +272,7 @@ public class Communication {
 		}
 		return sameMusican;
 	}
+	
 	
 	/**
 	 * Method used to collect the info about the bandmembers when asked for (Visitor side)
@@ -301,16 +315,15 @@ public class Communication {
 	}
 	
 	
-	
 	/**
-	 * Method used to insert an assigned contactperson and the selected unassigned band in the db
+	 * Method used to insert an assigned contactperson and the selected current unassigned band into the database
 	 * @param band
 	 * @param worker
 	 * @throws SQLException
 	 */
 	public void insertContact(String band, String worker) throws SQLException {
 		String queryBandID = "select bandid from band where bandname = '"+band+"'";
-		String queryWorkerID = "select workerid from worker where name='"+worker+"'"; //person nummer??
+		String queryWorkerID = "select workerid from worker where name='"+worker+"'"; 
 		int insertBandID = 0;
 		int insertWorkerID = 0;
 		
@@ -334,6 +347,7 @@ public class Communication {
 	}
 	
 	
+	
 	/**
 	 * Method used to check if a band has a contactperson assigned to them
 	 * @param bandname
@@ -355,8 +369,9 @@ public class Communication {
 		return assigned;
 	}
 	
+	
 	/**
-	 * Method used to get the latest checked/assigned contactpersons name
+	 * Method used to get the latest checked/assigned contactperson's name
 	 * @return
 	 */
 	public String getContactName() {
@@ -365,11 +380,11 @@ public class Communication {
 	
 	
 	/**
-	 * All the names of the workers
+	 * Method used to get all the names of the workers in the database
 	 * @return
 	 */
 	public ArrayList<String> getWorkerNameList() {
-		String query = "Select * From Worker"; //elr name
+		String query = "Select * From Worker"; 
 		ArrayList<String> workerName = new ArrayList<String>();
 		
 		try {
@@ -383,8 +398,13 @@ public class Communication {
 		return workerName;
 	}
 	
+	
+	/**
+	 * Method used to get all the names of the bands in the database
+	 * @return
+	 */
 	public ArrayList<String> getBandNameList() {
-		String query = "Select * From Band"; //elr name
+		String query = "Select * From Band"; 
 		ArrayList<String> bandNames = new ArrayList<String>();
 		
 		try {
@@ -399,6 +419,13 @@ public class Communication {
 		return bandNames;
 	}
 	
+	
+	/**
+	 * Method used to get the id of a specific band
+	 * @param bandname
+	 * @return
+	 * @throws SQLException
+	 */
 	public int getBandID(String bandname) throws SQLException {
 		String idQuery = "Select bandid from band where bandname='" +bandname+"'";
 		int bandID = 0;
@@ -413,8 +440,9 @@ public class Communication {
 		return bandID;
 	}
 	
+	
 	/**
-	 * The numbers of either workers or bands, depending on the parameters
+	 * Method used to get the number of either workers or bands, depending on the parameters
 	 * @return integer with Workers
 	 */
 	public int getCount(String type) {
@@ -440,23 +468,9 @@ public class Communication {
 	}
 	
 	
-	public static void main (String[] args) {
-		Communication comm = new Communication();
-		
-//		ArrayList<String> list = comm.getWorkerNameList();
-//		
-//		for(String str : list) {
-//			System.out.println(str);
-//		}
-		
-//		ArrayList<String> getWorkerName = comm.getWorkerName();
-//		for (String workerName : getWorkerName) {
-//			System.out.println(workerName);
-//		}
-		
-		//System.out.println(comm.getCount("Band"));
-		
-	}
+//	public static void main (String[] args) {
+//		Communication comm = new Communication();	
+//	}
 
 }
 

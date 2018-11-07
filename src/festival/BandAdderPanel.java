@@ -17,6 +17,11 @@ import javax.swing.JTextField;
 import javax.swing.event.DocumentEvent;
 import javax.swing.event.DocumentListener;
 
+/**
+ * Class which represents the GUI used to add a band
+ * @author JakobK98
+ *
+ */
 public class BandAdderPanel extends JPanel implements ActionListener, DocumentListener {
 	private JFrame frame;
 	private WorkerScreen wScreen;
@@ -40,6 +45,10 @@ public class BandAdderPanel extends JPanel implements ActionListener, DocumentLi
 	private int memberCounter = 0;
 	private ArrayList<BandMember> memberList = new ArrayList<BandMember>();
 	
+	/**
+	 * Constructor
+	 * @param wScreen
+	 */
 	public BandAdderPanel(WorkerScreen wScreen) {
 		this.wScreen = wScreen;
 		setLayout(null);
@@ -49,6 +58,10 @@ public class BandAdderPanel extends JPanel implements ActionListener, DocumentLi
 		showStartMenu();
 	}
 	
+	/**
+	 * Method used to create the GUI
+	 * @return
+	 */
 	public JPanel infoPanel() {
 		JPanel panel = new JPanel();
 		panel.setLayout(null);
@@ -105,6 +118,13 @@ public class BandAdderPanel extends JPanel implements ActionListener, DocumentLi
 		return panel;
 	}
 	
+	/**
+	 * Method used to scale the pictures
+	 * @param image
+	 * @param width
+	 * @param height
+	 * @return
+	 */
 	public ImageIcon scalePicture(ImageIcon image, int width, int height) {
 		Image transImage = image.getImage();
 		Image scaledImage = transImage.getScaledInstance(width, height, Image.SCALE_SMOOTH);		
@@ -112,10 +132,19 @@ public class BandAdderPanel extends JPanel implements ActionListener, DocumentLi
 		return image;
 	}
 	
+	/**
+	 * Method used to get the current amount of members in the band
+	 * @return
+	 */
 	public int getMemberCounter() {
 		return memberCounter;
 	}
 	
+	/**
+	 * Method used to update the GUI with the name and instrument of the added member
+	 * @param name
+	 * @param instrument
+	 */
 	public void updateMemberList(String name, String instrument) {
 		memberCounter++;
 	
@@ -145,6 +174,9 @@ public class BandAdderPanel extends JPanel implements ActionListener, DocumentLi
 		}
 	}
 	
+	/**
+	 * Method used to show the frame
+	 */
 	public void showStartMenu() {
 		frame = new JFrame("Add Band");
 		frame.setPreferredSize(new Dimension(700, 500));
@@ -154,6 +186,9 @@ public class BandAdderPanel extends JPanel implements ActionListener, DocumentLi
 		frame.setLocationRelativeTo(null);
 	}
 	
+	/**
+	 * Method used to check if its ok to submit the band
+	 */
 	public void checkSubmit() {
 		if(!tfBandName.getText().trim().isEmpty()) {
 			correctName = true;
@@ -172,6 +207,9 @@ public class BandAdderPanel extends JPanel implements ActionListener, DocumentLi
 		}
 	}
 	
+	/**
+	 * Method used to check the membersize and sets a cap on 5 members
+	 */
 	public void checkMemberSize() {
 		if(memberCounter >= 5) {
 			btnAdd.setEnabled(false);
@@ -180,10 +218,17 @@ public class BandAdderPanel extends JPanel implements ActionListener, DocumentLi
 		}
 	}
 	
+	/**
+	 * Method which adds a member to a list, used to store the information
+	 * @param member
+	 */
 	public void addMemberToList(BandMember member) {
 		memberList.add(member);	
 	}
 	
+	/**
+	 * The following methods are activated when text is inserted into a textfield
+	 */
 	public void insertUpdate(DocumentEvent e) {
 		checkSubmit();
 	}
@@ -196,6 +241,9 @@ public class BandAdderPanel extends JPanel implements ActionListener, DocumentLi
 		checkSubmit();
 	}
 
+	/**
+	 * Method which listens to the buttons in the GUI
+	 */
 	public void actionPerformed(ActionEvent e) {
 		if(e.getSource()==btnSubmit) {
 			memberCounter = 0;

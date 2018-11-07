@@ -1,6 +1,5 @@
 package festival;
 
-import java.awt.BorderLayout;
 import java.awt.Color;
 
 import java.awt.Dimension;
@@ -9,9 +8,6 @@ import java.awt.GridLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.util.ArrayList;
-import java.util.Random;
-
-import javax.swing.BorderFactory;
 import javax.swing.ButtonGroup;
 import javax.swing.JButton;
 import javax.swing.JFrame;
@@ -20,10 +16,12 @@ import javax.swing.JPanel;
 import javax.swing.JRadioButton;
 import javax.swing.JScrollPane;
 import javax.swing.JTextArea;
-import javax.swing.JViewport;
 
-import connection.Communication;
-
+/**
+ * Class which represents the GUI of the Visitor side 
+ * @author JakobK98
+ *
+ */
 public class VisitorScreen extends JPanel implements ActionListener {
 	private VisitorController controller;
 	private JLabel lblschedule = new JLabel("Schedule");
@@ -37,7 +35,6 @@ public class VisitorScreen extends JPanel implements ActionListener {
 	private RadioButtonListener rbgroup = new RadioButtonListener();
 	private String currentChosenBand;
 	private ArrayList<SchedulePanel> scheduleList = new ArrayList<SchedulePanel>();
-	
 	private int customSize;
 	private boolean custom = false;
 	private int startShowingIndex;
@@ -45,6 +42,10 @@ public class VisitorScreen extends JPanel implements ActionListener {
 	private int scheduleSize = 0;
 	private String bandInfoShowing = "";
 	
+	/**
+	 * Constructor
+	 * @param controller
+	 */
 	public VisitorScreen(VisitorController controller) {
 		setPreferredSize(new Dimension(1000, 700));
 		setLayout(null);
@@ -63,6 +64,10 @@ public class VisitorScreen extends JPanel implements ActionListener {
 		
 	}
 	
+	/**
+	 * Method used to create the left side of the GUI
+	 * @return
+	 */
 	public JPanel leftPanel() {
 		JPanel panel = new JPanel();
 		panel.setLayout(null);
@@ -76,14 +81,6 @@ public class VisitorScreen extends JPanel implements ActionListener {
 		schedulePanel.setBackground(Color.WHITE);
 		schedulePanel.setLayout(new GridLayout(5,1));
 		
-//		JScrollPane scrollp = new JScrollPane(JScrollPane.VERTICAL_SCROLLBAR_ALWAYS, JScrollPane.HORIZONTAL_SCROLLBAR_AS_NEEDED);
-//		scrollp.getViewport().add(schedulePanel);
-//		JViewport vp = scrollp.getViewport();
-//		vp.add(schedulePanel);
-//		vp.setBounds(175, 90, 325, 500);
-//		scrollp.setBounds(175, 90, 325, 500);
-//		scrollp.setPreferredSize(new Dimension(325, 500));
-		
 		btnUp.setBounds(175, 25, 325, 50);
 		btnDown.setBounds(175, 600, 325, 50);
 		
@@ -94,6 +91,10 @@ public class VisitorScreen extends JPanel implements ActionListener {
 		return panel;
 	}
 	
+	/**
+	 * Method used to create the right side of the GUI
+	 * @return
+	 */
 	public JPanel rightPanel() {
 		JPanel panel = new JPanel();
 		panel.setLayout(null);
@@ -107,7 +108,6 @@ public class VisitorScreen extends JPanel implements ActionListener {
 		scroll.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_ALWAYS);
 		scroll.setHorizontalScrollBarPolicy(JScrollPane.HORIZONTAL_SCROLLBAR_AS_NEEDED);
 		scroll.setBounds(100, 90, 300, 500);
-		//informationArea.setBounds(100, 90, 300, 500);
 		informationArea.setEnabled(false);
 		
 		btnView.setBounds(100, 600, 300, 50);
@@ -116,11 +116,14 @@ public class VisitorScreen extends JPanel implements ActionListener {
 		
 		panel.add(btnView);
 		panel.add(scroll);
-		//panel.add(informationArea);
 		panel.add(lblinfo);
 		return panel;
 	}
 	
+	/**
+	 * Method used to initiate the schedule list
+	 * @param list
+	 */
 	public void initiateSchedule(ArrayList<SchedulePanel> list) {
 		if(scheduleSize <= 5) {
 			endShowingIndex = scheduleSize;
@@ -141,6 +144,9 @@ public class VisitorScreen extends JPanel implements ActionListener {
 		}
 	}
 	
+	/**
+	 * Method which handles the logic when the button previous is pressed, showing the previous lineup of concerts
+	 */
 	public void goUp() {
 		startShowingIndex = startShowingIndex - 5;
 		if(custom == true) {
@@ -155,6 +161,9 @@ public class VisitorScreen extends JPanel implements ActionListener {
 		btnDown.setEnabled(true);
 	}
 	
+	/**
+	 * Method which handles the logic when the button next is pressed, showing the next lineup of concerts
+	 */
 	public void goDown() {
 		startShowingIndex = startShowingIndex + 5;
 		if((endShowingIndex + 5) > scheduleSize) {
@@ -173,6 +182,11 @@ public class VisitorScreen extends JPanel implements ActionListener {
 		btnUp.setEnabled(true);
 	}
 	
+	/**
+	 * Method used to update the panel when a button is pressed
+	 * @param start
+	 * @param end
+	 */
 	public void setUpSchedule(int start, int end) {
 		schedulePanel.removeAll();
 		schedulePanel.repaint();
@@ -184,12 +198,19 @@ public class VisitorScreen extends JPanel implements ActionListener {
 		schedulePanel.revalidate();
 	}
 	
-	
+	/**
+	 * Method used to display the band information 
+	 * @param infoList
+	 */
 	public void addBandInfo(ArrayList<String> infoList) {
 		bandInfoShowing += "Bandname: " + infoList.get(0) + "\nOrigin: " + infoList.get(1) + "\nMembers:\n\n";
 		informationArea.setText(bandInfoShowing);
 	}
 	
+	/**
+	 * Method used to display the information of the members
+	 * @param memberList
+	 */
 	public void addBandMemberInfo(ArrayList<BandMember> memberList) {
 		for(BandMember member : memberList) {
 			bandInfoShowing += "Name: "+ member.getName()+"\nOrigin: "+member.getCountry() + "\nInstrument: " + member.getInstrument() + "\nExtra info: " + member.getXtraInfo() + "\n\n";
@@ -197,6 +218,9 @@ public class VisitorScreen extends JPanel implements ActionListener {
 		informationArea.setText(bandInfoShowing);
 	}
 	
+	/**
+	 * Method used to show the frame
+	 */
 	public void showScreen() {
 		JFrame frame = new JFrame("Visitor Screen");
 		frame.setPreferredSize(new Dimension(1000, 700));
@@ -208,6 +232,9 @@ public class VisitorScreen extends JPanel implements ActionListener {
 		frame.setVisible(true);	
 	}
 	
+	/**
+	 * Method which listens to the buttons of the GUI
+	 */
 	public void actionPerformed(ActionEvent e) {
 		if(e.getSource()==btnView) {
 			informationArea.setText("");
@@ -226,6 +253,10 @@ public class VisitorScreen extends JPanel implements ActionListener {
 		}
 	}
 	
+	/**
+	 * Inner class which listens to the radiobuttons of the individual booked concerts 
+	 * @author JakobK98
+	 */
 	private class RadioButtonListener implements ActionListener {
 		public void actionPerformed(ActionEvent e) {
 			btnView.setEnabled(true);
