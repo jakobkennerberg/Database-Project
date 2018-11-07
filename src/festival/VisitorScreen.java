@@ -38,6 +38,7 @@ public class VisitorScreen extends JPanel implements ActionListener {
 	private ArrayList<SchedulePanel> scheduleList = new ArrayList<SchedulePanel>();
 	
 	private int scheduleSize = 5;
+	private String bandInfoShowing = "";
 	
 	public VisitorScreen(VisitorController controller) {
 		setPreferredSize(new Dimension(1000, 700));
@@ -47,6 +48,7 @@ public class VisitorScreen extends JPanel implements ActionListener {
 		add(rightPanel());
 		scheduleList = controller.getSchedule(scheduleList);
 		updateSchedule(scheduleList);
+		//scheduleSize = scheduleList.size();
 		
 		btnView.addActionListener(this);
 		btnUp.addActionListener(this);
@@ -96,10 +98,10 @@ public class VisitorScreen extends JPanel implements ActionListener {
 		lblinfo.setBounds(100, 30, 300, 75);
 		lblinfo.setFont(new Font("SansSerif", Font.BOLD, 25));
 		lblinfo.setHorizontalAlignment(JLabel.CENTER);
-		informationArea.setBounds(100, 90, 300, 400);
+		informationArea.setBounds(100, 90, 300, 500);
 		informationArea.setEnabled(false);
 		
-		btnView.setBounds(100, 500, 300, 90);
+		btnView.setBounds(100, 600, 300, 50);
 		btnView.setEnabled(false);
 		btnView.setFont(new Font("SansSerif", Font.BOLD, 20));
 		
@@ -137,6 +139,18 @@ public class VisitorScreen extends JPanel implements ActionListener {
 		return scheduleSize;
 	}
 	
+	public void addBandInfo(ArrayList<String> infoList) {
+		bandInfoShowing += "Bandname: " + infoList.get(0) + "\nOrigin: " + infoList.get(1) + "\nMembers:\n\n";
+		informationArea.setText(bandInfoShowing);
+	}
+	
+	public void addBandMemberInfo(ArrayList<BandMember> memberList) {
+		for(BandMember member : memberList) {
+			bandInfoShowing += "Name: "+ member.getName()+"\nOrigin: "+member.getCountry() + "\nInstrument: " + member.getInstrument() + "\nExtra info: " + member.getXtraInfo() + "\n\n";
+		}
+		informationArea.setText(bandInfoShowing);
+	}
+	
 	public void showScreen() {
 		JFrame frame = new JFrame("Visitor Screen");
 		frame.setPreferredSize(new Dimension(1000, 700));
@@ -153,7 +167,6 @@ public class VisitorScreen extends JPanel implements ActionListener {
 			informationArea.setText("");
 			controller.getBandInfo(currentChosenBand);
 			controller.getBandMemberInfo(currentChosenBand);
-			//begär band info med hjälp av bandnamnet
 		}
 		if(e.getSource()==btnUp) {
 			
@@ -170,7 +183,6 @@ public class VisitorScreen extends JPanel implements ActionListener {
 				JRadioButton rb = (JRadioButton)e.getSource();
 				String bandName = rb.getText();
 				currentChosenBand = bandName;
-				informationArea.setText(bandName);
 
 			} catch (Exception e1) {}
 		}

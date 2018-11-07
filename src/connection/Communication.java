@@ -265,19 +265,37 @@ public class Communication {
 	 * @param bandName
 	 * @return
 	 */
-	public ArrayList<BandMember> getBandMemberInfo(String bandName) {
+	public ArrayList<BandMember> getBandMemberInfo(String bandName) throws SQLException {
+		String memberInfoQuery = "select member.name, member.origin, member.instrument, member.extrainfo from band join memberof on band.bandid=memberof.bandid join member on memberof.memberid=member.memberid where band.bandname='"+bandName+"'";
 		ArrayList<BandMember> list = new ArrayList<BandMember>();
+		
+		PreparedStatement pst = conn.prepareStatement(memberInfoQuery);
+		ResultSet rs = pst.executeQuery();
+		
+		while(rs.next()) {
+			list.add(new BandMember(rs.getString("name"), rs.getString("origin"), rs.getString("instrument"), rs.getString("extrainfo")));
+		}
 		
 		return list;
 	}
+	
 	
 	/**
 	 * Method used to collect the info about the band when asked for (Visitor side)
 	 * @param bandname
 	 * @return
 	 */
-	public ArrayList<String> getBandInfo(String bandname) {
+	public ArrayList<String> getBandInfo(String bandname) throws SQLException  {
+		String bandInfoQuery = "select bandname, origin from band where bandname='"+bandname+"'";
 		ArrayList<String> info = new ArrayList<String>();
+		
+		PreparedStatement pst = conn.prepareStatement(bandInfoQuery);
+		ResultSet rs = pst.executeQuery();
+		
+		while(rs.next()) {
+			info.add(rs.getString("bandname"));
+			info.add(rs.getString("origin"));
+		}
 		
 		return info;
 	}

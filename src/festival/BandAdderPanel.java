@@ -175,6 +175,8 @@ public class BandAdderPanel extends JPanel implements ActionListener, DocumentLi
 	public void checkMemberSize() {
 		if(memberCounter >= 5) {
 			btnAdd.setEnabled(false);
+		} else {
+			btnAdd.setEnabled(true);
 		}
 	}
 	

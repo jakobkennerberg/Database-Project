@@ -106,7 +106,6 @@ public class MemberAdderPanel extends JPanel implements ActionListener, Document
 		frame = new JFrame("Add Band Member");
 		frame.setPreferredSize(new Dimension(700, 500));
 		frame.pack();
-		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		frame.add(this);
 		frame.setVisible(true);
 	}

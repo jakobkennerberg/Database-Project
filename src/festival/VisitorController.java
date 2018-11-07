@@ -7,10 +7,11 @@ import connection.Communication;
 
 public class VisitorController {
 	private Communication dbManager;
+	private VisitorScreen vScreen;
 
 	public VisitorController(Communication comm) {
 		dbManager = comm;
-		new VisitorScreen(this);
+		vScreen = new VisitorScreen(this);
 	}
 	
 	public ArrayList<SchedulePanel> getSchedule(ArrayList<SchedulePanel> schedule) {
@@ -22,16 +23,22 @@ public class VisitorController {
 		return schedule;
 	}
 	
-	public ArrayList<BandMember> getBandMemberInfo(String bandname) {
-		ArrayList<BandMember> memberList = dbManager.getBandMemberInfo(bandname);
-		return memberList;
+	public void getBandMemberInfo(String bandname) {
+		ArrayList<BandMember> memberList = new ArrayList<BandMember>();
+		try {
+			memberList = dbManager.getBandMemberInfo(bandname);
+		} catch (SQLException e) {}
 		
+		vScreen.addBandMemberInfo(memberList);
 	}
 	
-	public ArrayList<String> getBandInfo(String bandname) {
-		ArrayList<String> bandInfo = dbManager.getBandInfo(bandname);
-		return bandInfo;
-				
+	public void getBandInfo(String bandname) {
+		ArrayList<String> bandInfo = new ArrayList<String>();
+		try {
+			bandInfo = dbManager.getBandInfo(bandname);
+		} catch (SQLException e) {}
+		
+		vScreen.addBandInfo(bandInfo);
 	}
 	
 }
