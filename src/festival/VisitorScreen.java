@@ -151,12 +151,18 @@ public class VisitorScreen extends JPanel implements ActionListener {
 		startShowingIndex = startShowingIndex - 5;
 		if(custom == true) {
 			endShowingIndex = endShowingIndex - customSize;
+			if(endShowingIndex == 5) {
+				endShowingIndex = 5;
+				btnUp.setEnabled(false);
+			}
 		}
-		else if((endShowingIndex - 5) == 5) {
+		else if((endShowingIndex - 5)== 5) {
 			endShowingIndex = 5;
 			btnUp.setEnabled(false);
+			System.out.println("då");
 		} else {
 			endShowingIndex = endShowingIndex - 5;
+			System.out.println("lollo");
 		}
 		btnDown.setEnabled(true);
 	}
