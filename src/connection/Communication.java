@@ -18,7 +18,7 @@ import festival.SchedulePanel;
 
 /**
  * Class used to communicate with the database
- * @author JakobK98
+ * @author JakobK98, Yun-Fah 
  *
  */
 public class Communication {
