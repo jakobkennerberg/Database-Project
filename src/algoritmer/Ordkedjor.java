@@ -9,14 +9,12 @@ import java.util.Queue;
 
 public class Ordkedjor {
 	private Graph graph;
-	private BFS bfs;
-	ArrayList<Node> wordList;
+	private ArrayList<Node> wordList;
 	
 	public void readFile() throws Exception {
-		BufferedReader br = new BufferedReader(new InputStreamReader(new FileInputStream("files/words14.txt")));
+		BufferedReader br = new BufferedReader(new InputStreamReader(new FileInputStream("files/words250.txt")));
 		ArrayList<String> words = new ArrayList<String>();
 		wordList = new ArrayList<Node>();
-		int positionCount = 0;
 		while (true) {
 			String word = br.readLine();
 			if (word == null) {
@@ -24,18 +22,14 @@ public class Ordkedjor {
 			}
 			assert word.length() == 5; // indatakoll, om man kör med assertions på
 			words.add(word);
-			wordList.add(new Node(word, positionCount));
-			positionCount++;
-			
+			wordList.add(new Node(word));
 		}
 		createGraph(wordList);	
 	}
 	
-
-	
 			
 	public void test() throws Exception {
-		BufferedReader br = new BufferedReader(new InputStreamReader(new FileInputStream("files/testcase14.txt")));
+		BufferedReader br = new BufferedReader(new InputStreamReader(new FileInputStream("files/testcase250.txt")));
 		Node startWord = null;
 		Node goalWord = null;
 		while (true) {
@@ -54,26 +48,25 @@ public class Ordkedjor {
 					goalWord = wordList.get(i);
 				}	
 			}
-			graph.search(startWord, goalWord);	
-		}
-			
+			int dist = graph.search(startWord, goalWord);
+			System.out.println(dist);
+		}	
 	}
 	
 	public void createGraph(ArrayList<Node> words) {
-		graph = new Graph(words.size());
+		graph = new Graph(words);
 		
 		for(int i = 0; i < words.size(); i++) {
 			for(Node w : words) {
 				if(words.get(i).equals(w)) {
-					//SKA MAN HA EN EDGE MED SIG SJÄLV????
+					
 				} else if (controlLetters(words.get(i), w)) {
-					graph.addEdge(words.get(i), w);
-					//System.out.println(words.get(i).getWord() +" -> "+ w.getWord());
+					words.get(i).addEdge(w);
+					//System.out.println(words.get(i).getWord() + " -> " + w.getWord());	
 				}		
 			}
 		}
 	}
-	
 	
 	public static boolean controlLetters(Node currentWord, Node compare) {
 		String word = currentWord.getWord();
