@@ -9,7 +9,6 @@ import java.util.Queue;
 
 public class Ordkedjor {
 	private Graph graph;
-	private BFS bfs;
 	ArrayList<Node> wordList;
 	
 	public void readFile() throws Exception {
